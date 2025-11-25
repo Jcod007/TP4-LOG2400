@@ -42,6 +42,7 @@ int main(int argc, char* argv[]) {
         getline(std::cin, cmd);
 
         if (cmd == "q") break;
+        
     }
 
     return 0;
