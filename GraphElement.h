@@ -10,4 +10,5 @@ public:
     virtual ~GraphElement() = default;
 
     virtual int getId() const;
+    virtual void dessiner() const = 0;
 };
