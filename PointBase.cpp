@@ -5,7 +5,7 @@ int PointBase::getId() const {
 }
 
 std::tuple<int, int> PointBase::getXY() const {
-    return xy_;
+    return m_xy;
 }
 
 std::string PointBase::getTexture() const {

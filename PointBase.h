@@ -6,7 +6,7 @@
 
 class PointBase : public GraphElement {
 protected:
-    std::tuple<int, int> xy_;
+    std::tuple<int, int> m_xy;
 
 public:
     virtual ~PointBase() = default;
