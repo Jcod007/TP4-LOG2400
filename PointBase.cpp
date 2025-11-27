@@ -1,13 +1,19 @@
 #include "PointBase.h"
 
 int PointBase::getId() const {
-    return id_;
+    return m_id;
 }
 
-std::tuple<int, int> PointBase::getXY() const {
+std::pair<int, int> PointBase::getXY() const {
     return m_xy;
 }
 
 std::string PointBase::getTexture() const {
-    return "Aucune";
+    return " ";
 }
+
+std::string PointBase::dessiner() const
+{
+    return m_id + ": (" + to_string(m_xy.first) + "," + to_string(m_xy.second) +") texture: "+getTexture(); ;
+}
+

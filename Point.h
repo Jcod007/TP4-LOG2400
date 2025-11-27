@@ -5,9 +5,9 @@
 
 class Point : public PointBase {
 public:
-    Point(const std::tuple<int, int>& xy);
+    Point(const std::pair<int, int>& xy);
 
     int getId() const override;
-    std::tuple<int, int> getXY() const override;
+    std::pair<int, int> getXY() const override;
     std::string getTexture() const override;
 };

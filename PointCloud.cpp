@@ -16,5 +16,5 @@ void PointCloud::addElement(std::shared_ptr<GraphElement> element) {
 }
 
 int PointCloud::getId() const {
-    return id_;
+    return m_id;
 }

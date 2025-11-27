@@ -1,17 +1,17 @@
 #include "Point.h"
 
-Point::Point(const std::tuple<int, int>& xy) {
-    xy_ = xy;
+Point::Point(const std::pair<int, int>& xy) {
+    m_xy = xy;
 }
 
 int Point::getId() const {
-    return id_;
+    return m_id;
 }
 
-std::tuple<int, int> Point::getXY() const {
-    return xy_;
+std::pair<int, int> Point::getXY() const {
+    return m_xy;
 }
 
 std::string Point::getTexture() const {
-    return "Aucune";
+    return " ";
 }
