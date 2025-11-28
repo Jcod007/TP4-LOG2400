@@ -1,4 +1,3 @@
-#include "tpAffichage.h"
 #include "AffichageListe.h"
 #include <iostream>
 #include <sstream>

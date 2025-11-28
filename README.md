@@ -95,9 +95,41 @@ L'`Invocateur` gère deux piles :
 - **undoStack** : Historique des commandes exécutées
 - **redoStack** : Commandes annulées pouvant être refaites
 
+## 🗑️ Suppression Intelligente
+
+### Comportement de `supprimerGraphElementById()`
+
+Lorsqu'un élément est supprimé, il est **automatiquement retiré** :
+1. ✅ Du Plan (vecteur `m_graphElements`)
+2. ✅ De TOUS les PointClouds qui le contiennent
+
+**Exemple** :
+```
+Avant suppression:
+  Plan: [Point(1), Point(2), PointCloud(100)]
+  PointCloud(100): [Point(1), Point(2)]
+
+Après supprimerGraphElementById(1):
+  Plan: [Point(2), PointCloud(100)]
+  PointCloud(100): [Point(2)]  ← Point(1) retiré automatiquement !
+```
+
+### Undo Complet
+
+`SupprimerCommand` sauvegarde :
+- L'élément supprimé (`m_backup`)
+- Les IDs des PointClouds affectés (`m_affectedCloudIds`)
+
+Lors du `undo()` :
+- L'élément est remis dans le Plan
+- L'élément est remis dans tous les PointClouds qui le contenaient
+
+📖 **Voir `SUPPRESSION_DOCS.md` pour plus de détails**
+
 ## 🚀 Prochaines Étapes
 
+- [x] ✅ Implémenter `SupprimerCommand` avec gestion des PointClouds
 - [ ] Implémenter `DeplacerCommand`
 - [ ] Implémenter `FusionEnNuageCommand`
 - [ ] Ajouter le `CommandManager` pour gérer undo/redo
-- [ ] Mettre à jour les chemins d'include dans tous les fichiers
+- [ ] Mettre à jour les chemins d'include dans tous les fichiers restants
