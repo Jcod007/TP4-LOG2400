@@ -1,12 +1,12 @@
 #include "GraphElement.h"
 
-int GraphElement::nextId_ = 0;
+int GraphElement::m_nextId = 0;
 
 GraphElement::GraphElement() {
-    id_ = nextId_;
-    nextId_++;
+    m_id = m_nextId;
+    m_nextId++;
 }
 
 int GraphElement::getId() const {
-    return id_;
+    return m_id;
 }

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <tuple>
 #include <string>
 #include "GraphElement.h"
 
@@ -15,6 +14,7 @@ public:
 
     int getId() const override;
     virtual std::pair<int, int> getXY() const;
+    virtual void setXY(int x, int y);
     virtual std::string getTexture() const;
     virtual std::string dessiner() const override;
 };

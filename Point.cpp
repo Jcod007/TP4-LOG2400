@@ -13,5 +13,5 @@ std::pair<int, int> Point::getXY() const {
 }
 
 std::string Point::getTexture() const {
-    return " ";
+    return "\'\'";
 }

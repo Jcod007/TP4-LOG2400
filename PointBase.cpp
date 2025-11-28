@@ -8,12 +8,14 @@ std::pair<int, int> PointBase::getXY() const {
     return m_xy;
 }
 
+void PointBase::setXY(int x, int y) {
+    m_xy = {x, y};
+}
+
 std::string PointBase::getTexture() const {
-    return " ";
+    return "\"\"";
 }
 
-std::string PointBase::dessiner() const
-{
-    return m_id + ": (" + to_string(m_xy.first) + "," + to_string(m_xy.second) +") texture: "+getTexture(); ;
+std::string PointBase::dessiner() const {
+    return to_string(getId())+": ("+to_string(getXY().first)+", "+to_string(getXY().second)+") texture: "+getTexture();
 }
-

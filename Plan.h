@@ -13,6 +13,7 @@ class Plan
         Plan() = default;
         ~Plan() = default;
         vector<shared_ptr<GraphElement>> getGraphElements() const;
+        void setGraphElements(vector<shared_ptr<GraphElement>> graphElements);
         bool supprimerGraphElementById(int id);
         bool deplacerGraphElementById(int id, int newX, int newY);
         vector<shared_ptr<GraphElement>> fusionEnNuage(vector<int> ids);
