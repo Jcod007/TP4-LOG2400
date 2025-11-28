@@ -13,3 +13,12 @@ vector<shared_ptr<GraphElement>> Plan::getGraphElements() const {
 void Plan::setGraphElements(vector<shared_ptr<GraphElement>> graphElements) {
     m_graphElements = graphElements;
 }
+
+shared_ptr<GraphElement> Plan::getGraphElementById(int id) {
+    for (auto& element : m_graphElements) {
+        if (element->getId() == id) {
+            return element;
+        }
+    }
+    return nullptr;
+}
