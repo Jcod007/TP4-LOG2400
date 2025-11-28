@@ -1,8 +1,10 @@
 #pragma once
 
 #include "GraphElement.h"
+#include "PointCloud.h"
 #include <vector>
 #include <memory>
+#include <string>
 
 using namespace std;
 
@@ -13,12 +15,14 @@ class Plan
         Plan() = default;
         ~Plan() = default;
         vector<shared_ptr<GraphElement>> getGraphElements() const;
+        shared_ptr<PointCloud> getNuagesByTexture(const string& texture) const;
+        shared_ptr<PointCloud> getOrCreateNuageByTexture(string texture);
         shared_ptr<GraphElement> getGraphElementById(int id);
         void setGraphElements(vector<shared_ptr<GraphElement>> graphElements);
         void supprimerGraphElementById(int id);
         void deplacerGraphElementById(int id, const pair<int,int>& position);
-        vector<shared_ptr<GraphElement>> fusionEnNuage(vector<int> ids);
+        shared_ptr<PointCloud> fusionEnNuage(vector<int> ids, vector<string> textures);
     
     private:
         vector<shared_ptr<GraphElement>> m_graphElements;
-}; 
+};

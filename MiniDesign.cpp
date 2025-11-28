@@ -12,8 +12,29 @@
 #include "Commande_A.h"
 #include "SupprimerCommand.h"
 #include "DeplacerCommand.h"
+#include "FusionEnNuageCommand.h"
 
 using namespace std;
+
+pair<int,int> parsingPosition(string& posStr)
+{
+            posStr.erase(remove(posStr.begin(), posStr.end(), '('), posStr.end());
+            posStr.erase(remove(posStr.begin(), posStr.end(), ')'), posStr.end());
+            
+            
+            int x, y;
+            size_t commaPos = posStr.find(',');
+            if (commaPos != string::npos) {
+                x = stoi(posStr.substr(0, commaPos));
+                y = stoi(posStr.substr(commaPos + 1));
+            } else {
+                istringstream iss(posStr);
+                iss >> x >> y;
+            }   
+            pair<int,int> newPos = {x, y};
+            return newPos;
+}
+
 
 int main(int argc, char* argv[]) {
     string args;
@@ -35,7 +56,7 @@ int main(int argc, char* argv[]) {
     plan.setGraphElements(PointFactory::creerPointsDepuisChaine(args));
     
     // Ce sont différentes textures possibles. Seules les 2 premières sont utilisées dans les scénarios du TP.
-    vector<char> texturesNuages = {'o', '#', '$'};
+    vector<string> texturesNuages = {"o", "#", "$"};
     string cmd;
     
     // Menu
@@ -58,6 +79,25 @@ int main(int argc, char* argv[]) {
             invocateur.setCommande(commande);
             invocateur.executerCommande();
         }
+        else if (cmd == "f")
+        {
+            cout << "Entrez les IDs des points a fusionner (separes par des espaces) : ";
+            string idsStr;
+            getline(cin, idsStr);
+            
+            // Utiliser istringstream pour lire plusieurs entiers
+            istringstream iss(idsStr);
+            int id;
+            vector<int> ids;
+            while (iss >> id) {
+                ids.push_back(id);
+            }
+            
+            // Utiliser la commande FusionEnNuageCommand
+            shared_ptr<Commande> commande = make_shared<FusionEnNuageCommand>(plan, ids, texturesNuages);
+            invocateur.setCommande(commande);
+            invocateur.executerCommande();
+        }
         else if (cmd == "s")
         {
             cout << "Entrez l'ID du point a supprimer : ";
@@ -76,34 +116,15 @@ int main(int argc, char* argv[]) {
             int id = stoi(idStr);
             
             cout << "Entrez la nouvelle position (x y) ou (x,y) : ";
-            string posStr;
-            getline(cin, posStr);
-            
-            // Parsing de la position - accepte "x y" ou "x,y" ou "(x,y)"
-            // Enlever les parenthèses si présentes
-            posStr.erase(remove(posStr.begin(), posStr.end(), '('), posStr.end());
-            posStr.erase(remove(posStr.begin(), posStr.end(), ')'), posStr.end());
-            
-            
             int x, y;
-            size_t commaPos = posStr.find(',');
-            if (commaPos != string::npos) {
-                x = stoi(posStr.substr(0, commaPos));
-                y = stoi(posStr.substr(commaPos + 1));
-            } else {
-                istringstream iss(posStr);
-                iss >> x >> y;
-            }
+            cin>>x>>y;
+            cin.ignore(10000, '\n');
             
-            
-            
-            pair<int,int> newPos = {x, y};
+            pair<int,int> newPos = {x,y};
             
             shared_ptr<Commande> commande = make_shared<DeplacerCommand>(plan, id, newPos);
             invocateur.setCommande(commande);
             invocateur.executerCommande();
-            
-            
         }
         
     }

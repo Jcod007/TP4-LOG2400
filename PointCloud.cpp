@@ -1,11 +1,12 @@
 #include "PointCloud.h"
 #include <algorithm>
+#include <sstream>
 
-PointCloud::PointCloud() {
+PointCloud::PointCloud(string texture) : m_texture(texture) {
 }
 
-PointCloud::PointCloud(const std::vector<std::shared_ptr<GraphElement>>& points)
-    : m_points(points) {
+PointCloud::PointCloud(const std::vector<std::shared_ptr<GraphElement>>& points, string texture)
+    : m_points(points), m_texture(texture) {
 }
 
 const std::vector<std::shared_ptr<GraphElement>>& PointCloud::getPoints() const {
@@ -34,10 +35,19 @@ bool PointCloud::containsPoint(int id) const {
         }) != m_points.end();
 }
 
+
+std::string PointCloud::getTexture() const {
+    return m_texture;
+}
+
 int PointCloud::getId() const {
     return m_id;
 }
 
 std::string PointCloud::dessiner() const {
-    return "PointCloud (ID: " + std::to_string(getId()) + ") with " + std::to_string(m_points.size()) + " points";
+    string pointsStr;
+    for (const auto& point : m_points) {
+        pointsStr += to_string(point->getId()) + ", ";
+    }
+    return "Nuage '" + m_texture + "' contient les points : " + pointsStr;
 }

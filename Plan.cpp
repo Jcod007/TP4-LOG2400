@@ -3,7 +3,11 @@
 #include "PointCloud.h"
 #include <algorithm>
 #include <iostream>
+#include <map>
 #include "GraphUtils.h"
+#include "Texture.h"
+#include "Texture_O.h"
+#include "Texture_F.h"
 
 using namespace std;
 
@@ -16,6 +20,39 @@ void Plan::deplacerGraphElementById(int id, const pair<int,int>& position) {
 
 vector<shared_ptr<GraphElement>> Plan::getGraphElements() const {
     return m_graphElements;
+}
+
+shared_ptr<PointCloud> Plan::getNuagesByTexture(const string& texture) const {
+    for (const auto& element : m_graphElements) {
+        // Vérifier si l'élément est un PointCloud
+        if (auto nuage = dynamic_pointer_cast<PointCloud>(element)) {
+            // Vérifier si la texture correspond
+            if (nuage->getTexture() == texture) {
+                return nuage;
+            }
+        }
+    }
+    
+    return nullptr;
+}
+
+shared_ptr<PointCloud> Plan::getOrCreateNuageByTexture(string texture) {
+    
+    // Chercher si un nuage avec cette texture existe déjà
+    auto nuageExistant = getNuagesByTexture(texture);
+    
+    if (nuageExistant != nullptr) {
+        // Le nuage existe déjà, le retourner
+        return nuageExistant;
+    }
+    
+    // Le nuage n'existe pas, le créer avec string
+    auto nouveauNuage = make_shared<PointCloud>(texture);
+    
+    // L'ajouter au plan
+    m_graphElements.push_back(nouveauNuage);
+    
+    return nouveauNuage;
 }
 
 void Plan::setGraphElements(vector<shared_ptr<GraphElement>> graphElements) {
@@ -47,8 +84,61 @@ void Plan::supprimerGraphElementById(int id) {
         [id](const shared_ptr<GraphElement>& element) {
             return element->getId() == id;
         });
-    
+   
     if (it != m_graphElements.end()) {
         m_graphElements.erase(it);
     }
+}
+
+shared_ptr<PointCloud> Plan::fusionEnNuage(vector<int> ids, vector<string> textures)
+{
+    if (ids.empty() || textures.empty()) {
+        return nullptr;
+    }
+    
+    // Parcourir les textures pour trouver la première qui n'existe pas
+    string textureACreer = "";
+    
+    for (string texture : textures) {
+        auto nuageExistant = getNuagesByTexture(texture);
+        
+        if (nuageExistant == nullptr) {
+            // Cette texture n'existe pas encore, on s'arrête ici
+            textureACreer = texture;
+            break;
+        }
+        // Sinon, on continue à la texture suivante
+    }
+    
+    // Si toutes les textures existent déjà, on ne crée rien
+    if (textureACreer == "") {
+        return nullptr;
+    }
+    
+    // Créer le nuage pour cette texture
+    auto nuage = getOrCreateNuageByTexture(textureACreer);
+    
+    // Ajouter tous les points au nuage
+    for(int id : ids)
+    {
+        // Récupérer le point
+        auto element = dynamic_pointer_cast<PointBase>(getGraphElementById(id));
+        if(element)
+        {
+            // Appliquer la texture au point
+            shared_ptr<PointBase> pointDecore = element;
+            
+            if(textureACreer == "o") {
+                pointDecore = Texture_O(element);
+            }
+            else if(textureACreer == "#") {
+                pointDecore = make_shared<Texture_F>(element);
+            }
+            
+            // Ajouter le point décoré au nuage
+            nuage->addElement(pointDecore);
+        }
+    }
+    
+    return nuage;
 }

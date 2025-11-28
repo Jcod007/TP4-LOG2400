@@ -18,6 +18,6 @@ std::string Texture::getTexture() const {
     return m_element->getTexture();
 }
 
-void Texture::setXY(int x, int y) override {
+void Texture::setXY(int x, int y){
     m_element->setXY(x, y); 
 }

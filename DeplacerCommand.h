@@ -13,5 +13,5 @@ class DeplacerCommand : public Commande
         Plan& m_plan;
         int m_id;
         pair<int,int> m_position;
-        pair<int,int>m_oldPosition;
+        pair<int,int> m_oldPosition;
 };
