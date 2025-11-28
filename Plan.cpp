@@ -121,22 +121,33 @@ shared_ptr<PointCloud> Plan::fusionEnNuage(vector<int> ids, vector<string> textu
     // Ajouter tous les points au nuage
     for(int id : ids)
     {
-        // Récupérer le point
-        auto element = dynamic_pointer_cast<PointBase>(getGraphElementById(id));
-        if(element)
-        {
-            // Appliquer la texture au point
-            shared_ptr<PointBase> pointDecore = element;
-            
-            if(textureACreer == "o") {
-                pointDecore = Texture_O(element);
+        // On cherche l'index dans le vecteur pour pouvoir le remplacer
+        for(auto& it : m_graphElements) {
+            if(it->getId() == id) {
+                
+                // Convertir en PointBase pour le décorateur
+                auto element = dynamic_pointer_cast<PointBase>(it);
+                
+                if(element) {
+                    shared_ptr<PointBase> pointDecore;
+
+                    // 1. CORRECTION SYNTAXIQUE : Utiliser make_shared
+                    if(textureACreer == "o") {
+                        pointDecore = make_shared<Texture_O>(element);
+                    }
+                    else if(textureACreer == "#") {
+                        pointDecore = make_shared<Texture_F>(element);
+                    }
+
+                    // Ajouter au nuage
+                    nuage->addElement(pointDecore);
+
+                    // 2. CORRECTION LOGIQUE : Mettre à jour le Plan !
+                    // On remplace l'ancien point par le point décoré dans la liste principale
+                    it = pointDecore;
+                }
+                break; // On a trouvé et traité ce point, on passe au suivant
             }
-            else if(textureACreer == "#") {
-                pointDecore = make_shared<Texture_F>(element);
-            }
-            
-            // Ajouter le point décoré au nuage
-            nuage->addElement(pointDecore);
         }
     }
     

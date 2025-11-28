@@ -46,8 +46,11 @@ int PointCloud::getId() const {
 
 std::string PointCloud::dessiner() const {
     string pointsStr;
-    for (const auto& point : m_points) {
-        pointsStr += to_string(point->getId()) + ", ";
+    for (size_t i = 0; i < m_points.size(); ++i) {
+        pointsStr += to_string(m_points[i]->getId());
+        if (i < m_points.size() - 1) {
+            pointsStr += ", ";
+        }
     }
     return "Nuage '" + m_texture + "' contient les points : " + pointsStr;
 }
