@@ -12,7 +12,8 @@ class SupprimerCommand : public Commande {
 public:
     SupprimerCommand(Plan& plan, int id);
     void executer() override;
-    void undo() override;
+void NewFunction();
+    //void undo() override;
 private:
     Plan& m_plan;
     int m_id;

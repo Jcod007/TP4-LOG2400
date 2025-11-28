@@ -30,22 +30,22 @@ void SupprimerCommand::executer() {
     m_plan.supprimerGraphElementById(m_id);
 }
 
-void SupprimerCommand::undo() {
-    if (m_backup == nullptr) {
-        cerr << "Aucun backup disponible pour undo" << endl;
-        return;
-    }
+// void SupprimerCommand::undo() {
+//     if (m_backup == nullptr) {
+//         cerr << "Aucun backup disponible pour undo" << endl;
+//         return;
+//     }
     
-    // Remettre l'élément dans le Plan
-    auto elements = m_plan.getGraphElements();
-    elements.push_back(m_backup);
-    m_plan.setGraphElements(elements);
+//     // Remettre l'élément dans le Plan
+//     auto elements = m_plan.getGraphElements();
+//     elements.push_back(m_backup);
+//     m_plan.setGraphElements(elements);
     
-    // Remettre l'élément dans les PointClouds qui le contenaient
-    for (int cloudId : m_affectedCloudIds) {
-        auto cloudElement = m_plan.getGraphElementById(cloudId);
-        if (auto cloud = dynamic_pointer_cast<PointCloud>(cloudElement)) {
-            cloud->addElement(m_backup);
-        }
-    }
-}
+//     // Remettre l'élément dans les PointClouds qui le contenaient
+//     for (int cloudId : m_affectedCloudIds) {
+//         auto cloudElement = m_plan.getGraphElementById(cloudId);
+//         if (auto cloud = dynamic_pointer_cast<PointCloud>(cloudElement)) {
+//             cloud->addElement(m_backup);
+//         }
+//     }
+// }

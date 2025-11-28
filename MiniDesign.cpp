@@ -8,6 +8,8 @@
 #include "PointFactory.h"
 #include <memory>
 #include "Invocateur.h"
+#include "Commande_A.h"
+#include "SupprimerCommand.h"
 
 using namespace std;
 
@@ -28,9 +30,10 @@ int main(int argc, char* argv[]) {
     Plan plan;
     Invocateur invocateur;
     
+    
     plan.setGraphElements(PointFactory::creerPointsDepuisChaine(args));
     
-    std::shared_ptr<Affichage> affichage = std::make_shared<AffichageListe>();
+    
   
     
     // Ce sont différentes textures possibles. Seules les 2 premières sont utilisées dans les scénarios du TP.
@@ -46,14 +49,26 @@ int main(int argc, char* argv[]) {
                   << "f  - Fusionner des points dans un nuage (et appliquer texture)\n"
                   << "d  - Deplacer un point (ID)\n"
                   << "s  - Supprimer un point (ID)\n"
-                  << "c1 - Créer les surfaces selon l'ordre des IDs\n"
-                  << "c2 - Créer les surfaces selon la distance minimale\n"
+                  << "c1 - Creer les surfaces selon l'ordre des IDs\n"
+                  << "c2 - Creer les surfaces selon la distance minimale\n"
                   << "q  - Quitter\n> ";
         getline(std::cin, cmd);
 
         if (cmd == "q") break;
         if (cmd == "a") {
-            affichage->afficher(plan);
+            shared_ptr<Commande> commande = make_shared<Commande_A>(make_unique<AffichageListe>(),plan);
+            invocateur.setCommande(commande);
+            invocateur.executerCommande();
+        }
+        else if (cmd == "s")
+        {
+            cout << "Entrez l'ID du point a supprimer : ";
+            string idStr;
+            getline(cin, idStr);
+            int id = stoi(idStr);
+            shared_ptr<Commande> commande = make_shared<SupprimerCommand>(plan, id);
+            invocateur.setCommande(commande);
+            invocateur.executerCommande();
         }
         
     }
