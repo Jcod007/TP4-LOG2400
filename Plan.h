@@ -16,7 +16,7 @@ class Plan
         shared_ptr<GraphElement> getGraphElementById(int id);
         void setGraphElements(vector<shared_ptr<GraphElement>> graphElements);
         void supprimerGraphElementById(int id);
-        void deplacerGraphElementById(int id, int newX, int newY);
+        void deplacerGraphElementById(int id, const pair<int,int>& position);
         vector<shared_ptr<GraphElement>> fusionEnNuage(vector<int> ids);
     
     private:

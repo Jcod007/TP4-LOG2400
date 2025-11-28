@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "Plan.h"
 #include "Point.h"
 #include "PointFactory.h"
@@ -10,6 +11,7 @@
 #include "Invocateur.h"
 #include "Commande_A.h"
 #include "SupprimerCommand.h"
+#include "DeplacerCommand.h"
 
 using namespace std;
 
@@ -30,11 +32,7 @@ int main(int argc, char* argv[]) {
     Plan plan;
     Invocateur invocateur;
     
-    
     plan.setGraphElements(PointFactory::creerPointsDepuisChaine(args));
-    
-    
-  
     
     // Ce sont différentes textures possibles. Seules les 2 premières sont utilisées dans les scénarios du TP.
     vector<char> texturesNuages = {'o', '#', '$'};
@@ -69,6 +67,43 @@ int main(int argc, char* argv[]) {
             shared_ptr<Commande> commande = make_shared<SupprimerCommand>(plan, id);
             invocateur.setCommande(commande);
             invocateur.executerCommande();
+        }
+        else if (cmd == "d")
+        {
+            cout << "Entrez l'ID du point a deplacer : ";
+            string idStr;
+            getline(cin, idStr);
+            int id = stoi(idStr);
+            
+            cout << "Entrez la nouvelle position (x y) ou (x,y) : ";
+            string posStr;
+            getline(cin, posStr);
+            
+            // Parsing de la position - accepte "x y" ou "x,y" ou "(x,y)"
+            // Enlever les parenthèses si présentes
+            posStr.erase(remove(posStr.begin(), posStr.end(), '('), posStr.end());
+            posStr.erase(remove(posStr.begin(), posStr.end(), ')'), posStr.end());
+            
+            
+            int x, y;
+            size_t commaPos = posStr.find(',');
+            if (commaPos != string::npos) {
+                x = stoi(posStr.substr(0, commaPos));
+                y = stoi(posStr.substr(commaPos + 1));
+            } else {
+                istringstream iss(posStr);
+                iss >> x >> y;
+            }
+            
+            
+            
+            pair<int,int> newPos = {x, y};
+            
+            shared_ptr<Commande> commande = make_shared<DeplacerCommand>(plan, id, newPos);
+            invocateur.setCommande(commande);
+            invocateur.executerCommande();
+            
+            
         }
         
     }

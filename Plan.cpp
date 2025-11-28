@@ -3,8 +3,16 @@
 #include "PointCloud.h"
 #include <algorithm>
 #include <iostream>
+#include "GraphUtils.h"
 
 using namespace std;
+
+void Plan::deplacerGraphElementById(int id, const pair<int,int>& position) {
+    auto element = getGraphElementById(id);
+    if (element) {
+        setPositionIfPoint(element,position.first, position.second);
+    }
+}
 
 vector<shared_ptr<GraphElement>> Plan::getGraphElements() const {
     return m_graphElements;
