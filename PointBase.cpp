@@ -17,5 +17,5 @@ std::string PointBase::getTexture() const {
 }
 
 std::string PointBase::dessiner() const {
-    return to_string(getId())+": ("+to_string(getXY().first)+", "+to_string(getXY().second)+") texture: "+getTexture();
+    return to_string(getId())+": ("+to_string(getXY().first)+", "+to_string(getXY().second)+") texture: "+getTexture() ? getTexture() : "\'\'";
 }

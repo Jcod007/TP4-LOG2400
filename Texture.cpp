@@ -2,7 +2,6 @@
 
 Texture::Texture(std::shared_ptr<PointBase> element)
     : m_element(element) {
-    m_xy = m_element->getXY();
 }
 
 Texture::~Texture() = default;
@@ -17,4 +16,8 @@ std::pair<int, int> Texture::getXY() const {
 
 std::string Texture::getTexture() const {
     return m_element->getTexture();
+}
+
+void Texture::setXY(int x, int y) override {
+    m_element->setXY(x, y); 
 }
