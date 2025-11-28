@@ -1,15 +1,15 @@
 #include "Invocateur.h"
 
-void Invocateur::setCommande(unique_ptr<Commande> cmd)
+void Invocateur::setCommande(shared_ptr<Commande> cmd)
 {
-    commande_ = move(cmd);
+    m_commande = cmd;
 }
 
 void Invocateur::executerCommande()
 {
-    if(commande_)
+    if(m_commande)
     {
-        commande_->executer();
-        historique_.push_back(move(commande_));
+        m_commande->executer();
+        m_historique.push_back(m_commande);
     }
 }

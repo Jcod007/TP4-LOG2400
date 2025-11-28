@@ -16,4 +16,5 @@ public:
     void addElement(std::shared_ptr<GraphElement> element);
 
     int getId() const override;
+    std::string dessiner() const override;
 };

@@ -1,4 +1,6 @@
-#include "graphElement.cpp"
+#pragma once
+
+#include "graphElement.h"
 #include "tpaffichage.h"
 #include "PointCloud.h"
 #include <vector>

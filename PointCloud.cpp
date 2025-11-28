@@ -1,4 +1,5 @@
 #include "PointCloud.h"
+#include <sstream>
 
 PointCloud::PointCloud() {
 }
@@ -16,11 +17,11 @@ void PointCloud::addElement(std::shared_ptr<GraphElement> element) {
 }
 
 int PointCloud::getId() const {
-    return id_;
+    return m_id;
 }
 
-void PointCloud::dessiner() const {
-    for (const auto& e : points_) {
-        e->dessiner();
-    }
+std::string PointCloud::dessiner() const {
+    std::stringstream ss;
+    ss << "PointCloud containing " << points_.size() << " elements";
+    return ss.str();
 }

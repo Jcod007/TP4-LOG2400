@@ -1,14 +1,17 @@
 #pragma once
+#include <string>
+
+using namespace std;
 
 class GraphElement {
 protected:
-    int id_;
-    static int nextId_;
+    int m_id;
+    static int m_nextId;
 
 public:
     GraphElement();
     virtual ~GraphElement() = default;
 
     virtual int getId() const;
-    virtual void dessiner() const = 0;
+    virtual string dessiner() const = 0;
 };
