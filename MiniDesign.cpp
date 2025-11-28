@@ -7,6 +7,7 @@
 #include "Point.h"
 #include "PointFactory.h"
 #include <memory>
+#include "Invocateur.h"
 
 using namespace std;
 
@@ -25,6 +26,7 @@ int main(int argc, char* argv[]) {
     // Voici des fonctions utiles pour réaliser le TP. 
     // TODO: Il faudrait les placer dans des classes appropriées.
     Plan plan;
+    Invocateur invocateur;
     
     plan.setGraphElements(PointFactory::creerPointsDepuisChaine(args));
     

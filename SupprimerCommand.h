@@ -11,7 +11,7 @@ using namespace std;
 class SupprimerCommand : public Commande {
 public:
     SupprimerCommand(Plan& plan, int id);
-    void execute() override;
+    void executer() override;
     void undo() override;
 private:
     Plan& m_plan;

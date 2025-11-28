@@ -7,7 +7,7 @@
 class Commande_O : public Commande
 {
     public:
-        void executer() const override;
+        void executer() override;
     
     private:
         unique_ptr<Affichage> m_affichage;

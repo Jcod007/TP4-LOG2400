@@ -10,7 +10,7 @@ class Commande_A : public Commande
 {
 
     public:
-        void executer() const override;
+        void executer() override;
         ~Commande_A() override = default;
         Commande_A(unique_ptr<Affichage> affichage, Plan& plan);
     

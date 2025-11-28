@@ -8,7 +8,7 @@ SupprimerCommand::SupprimerCommand(Plan& plan, int id)
     : m_plan(plan), m_id(id) {
 }
 
-void SupprimerCommand::execute() {
+void SupprimerCommand::executer() {
     // Sauvegarder l'élément pour undo
     m_backup = m_plan.getGraphElementById(m_id);
     if (m_backup == nullptr) {
