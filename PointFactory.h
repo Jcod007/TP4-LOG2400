@@ -5,7 +5,7 @@
 #include <string>
 #include "Point.h"
 #include "GraphElement.h"
-#include "tpAffichage.h"
+
 
 using namespace std;
 

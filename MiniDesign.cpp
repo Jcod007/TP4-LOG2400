@@ -1,8 +1,13 @@
-#include "affichage.h"
+#include "tpAffichage.h"
+#include "AffichageListe.h"
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
+#include "Plan.h"
+#include "Point.h"
+#include "PointFactory.h"
+#include <memory>
 
 using namespace std;
 
@@ -20,8 +25,12 @@ int main(int argc, char* argv[]) {
     
     // Voici des fonctions utiles pour réaliser le TP. 
     // TODO: Il faudrait les placer dans des classes appropriées.
-    vector<Point> points = creerPoints(args);
-    imprimerGrille(points);
+    Plan plan;
+    
+    plan.setGraphElements(PointFactory::creerPointsDepuisChaine(args));
+    
+    std::shared_ptr<Affichage> affichage = std::make_shared<AffichageListe>();
+  
     
     // Ce sont différentes textures possibles. Seules les 2 premières sont utilisées dans les scénarios du TP.
     vector<char> texturesNuages = {'o', '#', '$'};
@@ -42,6 +51,9 @@ int main(int argc, char* argv[]) {
         getline(std::cin, cmd);
 
         if (cmd == "q") break;
+        if (cmd == "a") {
+            affichage->afficher(plan);
+        }
         
     }
 
