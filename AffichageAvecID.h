@@ -1,8 +1,7 @@
 #pragma once
 #include "AffichageOrthese.h"
-#include "PointBase.h"
 
-class AffichageAvecTexture : public AffichageOrthese {
+class AffichageAvecID : public AffichageOrthese {
 protected:
     std::string getRepresentation(std::shared_ptr<GraphElement> element) const override;
     

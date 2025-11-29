@@ -13,6 +13,8 @@
 #include "SupprimerCommand.h"
 #include "DeplacerCommand.h"
 #include "FusionEnNuageCommand.h"
+#include "AffichageAvecTexture.h"
+#include "AffichageAvecID.h"
 
 using namespace std;
 
@@ -79,6 +81,18 @@ int main(int argc, char* argv[]) {
             invocateur.setCommande(commande);
             invocateur.executerCommande();
         }
+
+        else if (cmd == "o1") {
+            shared_ptr<Commande> commande = make_shared<Commande_A>(make_unique<AffichageAvecTexture>(),plan);
+            invocateur.setCommande(commande);
+            invocateur.executerCommande();
+        }
+        else if (cmd == "o2") {
+            shared_ptr<Commande> commande = make_shared<Commande_A>(make_unique<AffichageAvecID>(),plan);
+            invocateur.setCommande(commande);
+            invocateur.executerCommande();
+        }
+
         else if (cmd == "f")
         {
             cout << "Entrez les IDs des points a fusionner (separes par des espaces) : ";
@@ -108,6 +122,7 @@ int main(int argc, char* argv[]) {
             invocateur.setCommande(commande);
             invocateur.executerCommande();
         }
+        
         else if (cmd == "d")
         {
             cout << "Entrez l'ID du point a deplacer : ";
