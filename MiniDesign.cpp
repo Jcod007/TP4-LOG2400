@@ -37,6 +37,18 @@ pair<int,int> parsingPosition(string& posStr)
             return newPos;
 }
 
+void affichageMenu()
+{
+    cout << "Commandes disponibles :\n"
+         << " a  : Affichage liste\n"
+         << " o1 : Affichage avec texture\n"
+         << " o2 : Affichage avec ID\n"
+         << " f  : Fusionner des points en nuage\n"
+         << " s  : Supprimer un point\n"
+         << " d  : Déplacer un point\n"
+         << " q  : Quitter\n"
+         << "> ";
+}
 
 int main(int argc, char* argv[]) {
     string args;
@@ -59,20 +71,11 @@ int main(int argc, char* argv[]) {
     
     // Ce sont différentes textures possibles. Seules les 2 premières sont utilisées dans les scénarios du TP.
     vector<string> texturesNuages = {"o", "#", "$"};
-    string cmd;
-    
+    string cmd;    
+
     // Menu
     while (true) {
-        cout << "\nCommandes:\n"
-                  << "a  - Afficher les points et les nuages\n"
-                  << "o1 - Afficher l'orthèse avec les textures des points\n"
-                  << "o2 - Afficher l'orthèse avec les IDs des points\n"
-                  << "f  - Fusionner des points dans un nuage (et appliquer texture)\n"
-                  << "d  - Deplacer un point (ID)\n"
-                  << "s  - Supprimer un point (ID)\n"
-                  << "c1 - Creer les surfaces selon l'ordre des IDs\n"
-                  << "c2 - Creer les surfaces selon la distance minimale\n"
-                  << "q  - Quitter\n> ";
+        affichageMenu();
         getline(std::cin, cmd);
 
         if (cmd == "q") break;
