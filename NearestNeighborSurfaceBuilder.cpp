@@ -8,25 +8,26 @@
 #include <limits>
 #include <cmath>
 
+using namespace std;
+
 /**
  * Construire la surface en suivant l'algorithme du plus proche voisin :
  * - on part d'un point de départ (ici le premier de la liste)
- * - à chaque étape, on ajoute le point non encore utilisé le plus proche
- *   du point courant.
+ * - à chaque étape, on ajoute le point non encore utilisé le plus proche du point courant (on calcule la distance euclidienne aux autres point et on prend le minimum)
+ *   - on répète jusqu'à ce que tous les points soient utilisés
  */
-void NearestNeighborSurfaceBuilder::buildSurface(Surface& surface,
-                                                 const PointCloud& pointCloud)
+void NearestNeighborSurfaceBuilder::buildSurface(Surface& surface, const PointCloud& pointCloud)
 {
     surface.clearPoints();
 
     const auto& elements = pointCloud.getPoints();
 
-    std::vector<std::shared_ptr<PointBase>> points;
+    vector<shared_ptr<PointBase>> points;
     points.reserve(elements.size());
 
-    // On ne garde que les PointBase
+    
     for (const auto& element : elements) {
-        auto point = std::dynamic_pointer_cast<PointBase>(element);
+        auto point = dynamic_pointer_cast<PointBase>(element);
         if (point) {
             points.push_back(point);
         }
@@ -44,13 +45,13 @@ void NearestNeighborSurfaceBuilder::buildSurface(Surface& surface,
     used[currentIndex] = true;
     surface.addPoint(points[currentIndex]);
 
-    for (std::size_t step = 1; step < n; ++step) {
-        std::size_t nextIndex = n;
-        double bestDist2 = std::numeric_limits<double>::max();
+    for (size_t step = 1; step < n; ++step) {
+        size_t nextIndex = n;
+        double bestDist2 = numeric_limits<double>::max();
 
         auto [cx, cy] = points[currentIndex]->getXY();
 
-        for (std::size_t i = 0; i < n; ++i) {
+        for (size_t i = 0; i < n; ++i) {
             if (used[i]) continue;
 
             auto [x, y] = points[i]->getXY();
@@ -65,7 +66,7 @@ void NearestNeighborSurfaceBuilder::buildSurface(Surface& surface,
         }
 
         if (nextIndex == n) {
-            // plus aucun point disponible (sécurité)
+            // on arrive à la fin du vecteur (tous les points utilisés)
             break;
         }
 

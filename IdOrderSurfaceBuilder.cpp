@@ -8,10 +8,6 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
-#include <iostream>
-
-using namespace std;
-
 /**
  * Construire la surface dans l'ordre des IDs :
  * - on récupère tous les PointBase du nuage
@@ -20,5 +16,30 @@ using namespace std;
  */
 void IdOrderSurfaceBuilder::buildSurface(Surface& surface, const PointCloud& pointCloud)
 {
-    cout << "IdOrderSurfaceBuilder::buildSurface called" << std::endl;
+    surface.clearPoints();
+
+    const auto& elements = pointCloud.getPoints();
+
+    std::vector<std::shared_ptr<PointBase>> points;
+    points.reserve(elements.size());
+
+    // On ne garde que les éléments qui sont des points
+    for (const auto& element : elements) {
+        auto point = std::dynamic_pointer_cast<PointBase>(element);
+        if (point) {
+            points.push_back(point);
+        }
+    }
+
+    // Tri par ID croissant
+    std::sort(points.begin(), points.end(),
+              [](const std::shared_ptr<PointBase>& a,
+                 const std::shared_ptr<PointBase>& b) {
+                  return a->getId() < b->getId();
+              });
+
+    // Ajout dans la surface dans l'ordre trié
+    for (const auto& p : points) {
+        surface.addPoint(p);
+    }
 }
