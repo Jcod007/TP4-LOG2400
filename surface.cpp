@@ -1,83 +1,42 @@
-#pragma once
-
-#include "graphElement.h"
-#include "tpaffichage.h"
+#include "Surface.h"
+#include "SurfaceBuilder.h"
 #include "PointCloud.h"
-#include <vector>
-#include <tuple>
-#include <cmath>
-#include <iostream>
-#include <sstream>
-#include <algorithm>
+#include "PointBase.h"
 
+using namespace std;
 
+Surface::Surface(shared_ptr<PointCloud> pointCloud)
+    : pointCloud_(move(pointCloud))
+{
+}
 
-class SurfaceBuilder {
-protected:
-    PointCloud* pointCloud_;  
+void Surface::setSurfaceBuilder(shared_ptr<SurfaceBuilder> builder)
+{
+    surfaceBuilderStrategie_ = move(builder);
+}
 
-public:
-   
-    explicit SurfaceBuilder(PointCloud* pointCloud)
-        : pointCloud_(pointCloud) {}
-
-    virtual ~SurfaceBuilder() = default;
-
-    
-    void setPointCloud(PointCloud* pointCloud) {
-        pointCloud_ = pointCloud;
+void Surface::build()
+{
+    if (!surfaceBuilderStrategie_ || !pointCloud_) {
+        // si il n'y a pas de nuage de point ou de stratégie, on ne fait rien
+        return;
     }
 
-    virtual void build() = 0; 
-};
+    // La stratégie fait le taf
+    surfaceBuilderStrategie_->buildSurface(*this, *pointCloud_);
+}
 
+const vector<shared_ptr<PointBase>>& Surface::getPoints() const
+{
+    return points_;
+}
 
+void Surface::clearPoints()
+{
+    points_.clear();
+}
 
-class InOrderSurfaceBuilder : public SurfaceBuilder {
-public:
-
-    using SurfaceBuilder::SurfaceBuilder;
-
-    void build() override { 
-        //Ajouter l'implémentation ici
-    }
-};
-
-
-
-
-class NearestNeighborSurfaceBuilder : public SurfaceBuilder {
-public:
-    using SurfaceBuilder::SurfaceBuilder;
-
-    void build() override {
-        // Ajouter l'implémentation ici
-    }
-};
-
-
-
-
-class Surface {
-private:
-    SurfaceBuilder* surfaceBuilderStrategie_;   
-
-public:
-    
-    Surface(SurfaceBuilder* strategie = nullptr)
-        : surfaceBuilderStrategie_(strategie) {}
-
-   
-    void setSurfaceBuilder(SurfaceBuilder* strategie) {
-        surfaceBuilderStrategie_ = strategie;
-    }
-
-    
-    void build() {
-        if (surfaceBuilderStrategie_ != nullptr) {
-            surfaceBuilderStrategie_->build();
-        }
-    
-    }
-};
- 
+void Surface::addPoint(const shared_ptr<PointBase>& point)
+{
+    points_.push_back(point);
+}
