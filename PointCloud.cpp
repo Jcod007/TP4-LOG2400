@@ -52,5 +52,5 @@ std::string PointCloud::dessiner() const {
             pointsStr += ", ";
         }
     }
-    return "Nuage '" + m_texture + "' contient les points : " + pointsStr;
+    return to_string(getId())+": Nuage '" + m_texture + "' contient les points : " + pointsStr;
 }
