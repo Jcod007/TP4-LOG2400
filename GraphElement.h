@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <memory>
+#include <vector>
 
 using namespace std;
 
@@ -14,4 +16,6 @@ public:
 
     virtual int getId() const;
     virtual string dessiner() const = 0;
+    virtual void addChild(shared_ptr<GraphElement> child) {}
+    virtual void addChildren(const vector<shared_ptr<GraphElement>>& children) {}
 };

@@ -15,7 +15,8 @@ public:
     PointCloud(const std::vector<std::shared_ptr<GraphElement>>& points, string texture);
 
     const std::vector<std::shared_ptr<GraphElement>>& getPoints() const;
-    void addElement(std::shared_ptr<GraphElement> element);
+    void addChild(shared_ptr<GraphElement> child) override;
+    void addChildren(const vector<shared_ptr<GraphElement>>& children) override;
     void removePointById(int id);
     bool containsPoint(int id) const;
     std::string getTexture() const;
