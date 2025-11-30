@@ -13,7 +13,7 @@ private:
 public:
     PointCloud(string texture);
     PointCloud(const std::vector<std::shared_ptr<GraphElement>>& points, string texture);
-
+    std::vector<int> getAllPointIdsRecursively() const;
     const std::vector<std::shared_ptr<GraphElement>>& getPoints() const;
     void addChild(shared_ptr<GraphElement> child) override;
     void addChildren(const vector<shared_ptr<GraphElement>>& children) override;

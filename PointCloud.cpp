@@ -8,6 +8,21 @@
 PointCloud::PointCloud(string texture) : m_texture(texture) {
 }
 
+std::vector<int> PointCloud::getAllPointIdsRecursively() const {
+    std::vector<int> ids;
+    for (const auto& child : m_points) {
+        // Cas feuille (PointBase)
+        if (auto point = std::dynamic_pointer_cast<PointBase>(child)) {
+            ids.push_back(point->getId());
+        } 
+        // Cas noeud composite (PointCloud) -> Appel récursif
+        else if (auto cloud = std::dynamic_pointer_cast<PointCloud>(child)) {
+            std::vector<int> childIds = cloud->getAllPointIdsRecursively();
+            ids.insert(ids.end(), childIds.begin(), childIds.end());
+        }
+    }
+    return ids;
+}
 PointCloud::PointCloud(const std::vector<std::shared_ptr<GraphElement>>& points, string texture)
     : m_points(points), m_texture(texture) {
 }

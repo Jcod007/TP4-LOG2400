@@ -116,19 +116,57 @@ shared_ptr<PointCloud> Plan::fusionEnNuage(vector<int> ids, vector<string> textu
     }
     
     // Créer le nuage pour cette texture
-    auto nuage = getOrCreateNuageByTexture(textureACreer);
-
-    // Ajouter tous les éléments (points ou autres nuages) au nouveau nuage.
-    // La méthode addChild s'occupera de la décoration et de la fusion.
+   auto nouveauNuage = getOrCreateNuageByTexture(textureACreer);
+    
+    // Étape 1 : Collecter tous les IDs de points à décorer et ajouter les éléments de plus haut niveau au nouveau nuage
+    std::vector<int> allPointIdsToDecorate;
+    
+    // Parcourir les IDs donnés pour trouver les éléments dans le Plan
     for (int id : ids) {
-        auto element = getGraphElementById(id);
-        if (element) {
-            nuage->addChild(element);
+        auto it = std::find_if(m_graphElements.begin(), m_graphElements.end(), 
+            [id](const std::shared_ptr<GraphElement>& elem){ return elem->getId() == id; });
+
+        if (it != m_graphElements.end()) {
+            auto& elementDuPlan = *it; // Référence à l'élément dans la liste principale
+
+            if (auto point = std::dynamic_pointer_cast<PointBase>(elementDuPlan)) {
+                // Si c'est un point, on l'ajoute à la liste à décorer (sera décoré à l'étape 2)
+                allPointIdsToDecorate.push_back(id);
+            } 
+            else if (auto childCloud = std::dynamic_pointer_cast<PointCloud>(elementDuPlan)) {
+                // Si c'est un nuage, on récupère récursivement les IDs de ses points internes
+                std::vector<int> childrenPointsIds = childCloud->getAllPointIdsRecursively();
+                allPointIdsToDecorate.insert(allPointIdsToDecorate.end(), childrenPointsIds.begin(), childrenPointsIds.end());
+                // Note : Pas besoin de filtrer les doublons d'IDs de points ici, la décoration sera idempotente.
+            }
+            
+            // On ajoute l'élément (point ou nuage) au nouveau nuage parent (Composite)
+            nouveauNuage->addChild(elementDuPlan);
         }
     }
 
-    // Retirer les éléments fusionnés de la liste principale du plan, car ils appartiennent maintenant au nuage.
-    
+    // Étape 2 : Décorer tous les points collectés et mettre à jour les pointeurs dans le Plan
+    for (int pointId : allPointIdsToDecorate) {
+        // Trouver le point dans le Plan par référence (pour pouvoir modifier le shared_ptr)
+        auto pointIt = std::find_if(m_graphElements.begin(), m_graphElements.end(), 
+            [pointId](const std::shared_ptr<GraphElement>& elem){ return elem->getId() == pointId; });
 
-    return nuage;
+        if (pointIt != m_graphElements.end()) {
+            auto& pointDuPlan = *pointIt; // Référence au shared_ptr dans m_graphElements
+            
+            if (auto currentPoint = std::dynamic_pointer_cast<PointBase>(pointDuPlan)) {
+                
+                // Création du nouveau décorateur
+                std::shared_ptr<PointBase> pointDecore;
+                if (textureACreer == "o") pointDecore = std::make_shared<Texture_O>(currentPoint);
+                else if (textureACreer == "#") pointDecore = std::make_shared<Texture_F>(currentPoint);
+                else pointDecore = currentPoint;
+                
+                // CRUCIAL : Mettre à jour le pointeur dans le Plan pour que l'affichage soit correct
+                pointDuPlan = pointDecore;
+            }
+        }
+    }
+
+    return nouveauNuage;
 }

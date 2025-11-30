@@ -39,14 +39,16 @@ pair<int,int> parsingPosition(string& posStr)
 
 void affichageMenu()
 {
-    cout << "Commandes disponibles :\n"
-         << " a  : Affichage liste\n"
-         << " o1 : Affichage avec texture\n"
-         << " o2 : Affichage avec ID\n"
-         << " f  : Fusionner des points en nuage\n"
-         << " s  : Supprimer un point\n"
-         << " d  : Déplacer un point\n"
-         << " q  : Quitter\n"
+    cout << "Commandes :\n"
+         << "a - Afficher les points et les nuages\n"
+         << "o1 - Afficher l'orthèse avec les textures des points\n"
+         << "o2 - Afficher l'orthèse avec les IDs des points\n"
+         << "f - Fusionner des points dans un nuage (et appliquer texture)\n"
+         << "d - Deplacer un point (ID)\n"
+         << "s - Supprimer un point (ID)\n" // Rétablissement de la description pour 's'
+         << "c1 - Creer les surfaces selon l'ordre des IDs\n"
+         << "c2 - Creer les surfaces selon la distance minimale\n"
+         << "q - Quitter\n"
          << "> ";
 }
 
