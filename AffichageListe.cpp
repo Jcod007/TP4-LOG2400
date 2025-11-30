@@ -7,7 +7,7 @@ void AffichageListe::afficher(Plan& plan) const
 {
 
     cout << "Liste: "<<endl; 
-    for(const auto& element : plan.getGraphElements())
+    for(const auto& element : plan.obtenirElements())
         {
             cout<<element->dessiner()<<endl;
         }

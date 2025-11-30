@@ -1,0 +1,154 @@
+@startuml
+
+abstract class ElementGraphique {
+    # static int m_prochainId
+    # int m_id
+    + int obtenirId()
+    + {abstract} string dessiner()
+    + virtual void ajouterEnfant(shared_ptr<ElementGraphique>)
+    + virtual void ajouterEnfants(vector<shared_ptr<ElementGraphique>>)
+}
+
+abstract class PointBase {
+    # int m_x
+    # int m_y
+    + pair<int, int> obtenirXY()
+    + void definirXY(int, int)
+    + {abstract} string obtenirTexture()
+}
+
+class Point {
+    + string obtenirTexture()
+}
+
+class Texture {
+    # shared_ptr<PointBase> m_element
+    + string obtenirTexture()
+}
+
+class Texture_O {
+    + string obtenirTexture()
+}
+
+class Texture_F {
+    + string obtenirTexture()
+}
+
+class NuagePoints {
+    - vector<shared_ptr<ElementGraphique>> m_enfants
+    - string m_texture
+    + void ajouterEnfant(shared_ptr<ElementGraphique>)
+    + vector<int> obtenirTousIdsPointsRecursivement()
+    + string obtenirTexture()
+}
+
+class Surface {
+    - shared_ptr<NuagePoints> nuagePoints_
+    - shared_ptr<ConstructeurSurface> constructeurStrategie_
+    - vector<shared_ptr<PointBase>> points_
+    + void definirConstructeurSurface(shared_ptr<ConstructeurSurface>)
+    + void construire()
+    + void ajouterPoint(shared_ptr<PointBase>)
+}
+
+class Plan {
+    - vector<shared_ptr<ElementGraphique>> m_elementsGraphiques
+    + void creerSurface(int, shared_ptr<ConstructeurSurface>)
+    + shared_ptr<NuagePoints> fusionnerEnNuage(vector<int>, vector<string>)
+    + void deplacerElementGraphiqueParId(int, pair<int,int>)
+    + void supprimerElementGraphiqueParId(int)
+}
+
+interface ConstructeurSurface {
+    + {abstract} void construireSurface(Surface&, const NuagePoints&)
+}
+
+class ConstructeurSurfaceParOrdreId {
+    + void construireSurface(Surface&, const NuagePoints&)
+}
+
+class ConstructeurSurfaceParProchVoisin {
+    + void construireSurface(Surface&, const NuagePoints&)
+}
+
+interface Commande {
+    + {abstract} void executer()
+    + {abstract} void annuler()
+}
+
+class Invocateur {
+    - vector<shared_ptr<Commande>> pile_annulation_
+    - vector<shared_ptr<Commande>> pile_retablissement_
+    + void executer(shared_ptr<Commande>)
+    + void annuler()
+    + void retablir()
+}
+
+interface Affichage {
+    + {abstract} void afficher(Plan&)
+}
+
+class AffichageListe {
+    + void afficher(Plan&)
+}
+
+abstract class AffichageOrthese {
+    + void afficher(Plan&)
+    # {abstract} string obtenirRepresentation(shared_ptr<ElementGraphique>)
+}
+
+class AffichageAvecID {
+    # string obtenirRepresentation(shared_ptr<ElementGraphique>)
+}
+
+class AffichageAvecTexture {
+    # string obtenirRepresentation(shared_ptr<ElementGraphique>)
+}
+
+class FabriquePoint {
+    + {static} vector<shared_ptr<ElementGraphique>> creerPointsDepuisChaine(string)
+    + {static} shared_ptr<Point> creerPoint(int, int)
+}
+
+ElementGraphique <|-- PointBase
+ElementGraphique <|-- NuagePoints
+ElementGraphique <|-- Surface
+
+PointBase <|-- Point
+PointBase <|-- Texture
+Texture <|-- Texture_O
+Texture <|-- Texture_F
+Texture o-- PointBase
+
+NuagePoints o-- ElementGraphique
+
+Surface --> NuagePoints
+Surface --> ConstructeurSurface
+Surface o-- PointBase
+
+ConstructeurSurface <|.. ConstructeurSurfaceParOrdreId
+ConstructeurSurface <|.. ConstructeurSurfaceParProchVoisin
+
+Plan o-- ElementGraphique
+
+Commande <|.. CommandeAffichage
+Commande <|.. CommandeSupprimer
+Commande <|.. CommandeDeplacer
+Commande <|.. CommandeFusionEnNuage
+Commande <|.. CommandeCreerSurface
+
+Invocateur o-- Commande
+
+Affichage <|.. AffichageListe
+Affichage <|.. AffichageOrthese
+AffichageOrthese <|-- AffichageAvecID
+AffichageOrthese <|-- AffichageAvecTexture
+
+CommandeAffichage --> Affichage
+CommandeAffichage --> Plan
+CommandeSupprimer --> Plan
+CommandeDeplacer --> Plan
+CommandeFusionEnNuage --> Plan
+CommandeCreerSurface --> Plan
+
+@enduml

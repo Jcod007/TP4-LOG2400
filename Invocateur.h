@@ -11,9 +11,9 @@ class Invocateur
     public:
         void executer(shared_ptr<Commande> cmd);
         void annuler();
-        void rétablir();
+        void retablir();
         
     private:
         vector<shared_ptr<Commande>> pile_annulation_;
-        vector<shared_ptr<Commande>> pile_rétablissement_;
+        vector<shared_ptr<Commande>> pile_retablissement_;
 };

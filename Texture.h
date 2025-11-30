@@ -13,8 +13,8 @@ public:
     explicit Texture(std::shared_ptr<PointBase> element);
     virtual ~Texture();
 
-    int getId() const override;
-    std::pair<int, int> getXY() const override;
-    std::string getTexture() const override;
-    void setXY(int x, int y) override;
+    int obtenirId() const override;
+    std::pair<int, int> obtenirXY() const override;
+    std::string obtenirTexture() const override;
+    void definirXY(int x, int y) override;
 };

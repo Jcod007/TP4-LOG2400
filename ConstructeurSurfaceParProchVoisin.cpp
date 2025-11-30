@@ -1,6 +1,6 @@
 #include "ConstructeurSurfaceParProchVoisin.h"
 #include "Surface.h"
-#include "PointCloud.h"
+#include "NuagePoints.h"
 #include "PointBase.h"
 
 #include <vector>
@@ -17,11 +17,11 @@ using namespace std;
  * - à chaque étape, on ajoute le point non encore utilisé le plus proche du point courant (on calcule la distance euclidienne aux autres point et on prend le minimum)
  *   - on répète jusqu'à ce que tous les points soient utilisés
  */
-void ConstructeurSurfaceParProchVoisin::construireSurface(Surface& surface, const PointCloud& nuage)
+void ConstructeurSurfaceParProchVoisin::construireSurface(Surface& surface, const NuagePoints& nuage)
 {
-    surface.clearPoints();
+    surface.viderPoints();
 
-    const auto& elements = nuage.getPoints();
+    const auto& elements = nuage.obtenirPoints();
 
     vector<shared_ptr<PointBase>> points;
     points.reserve(elements.size());
@@ -44,23 +44,23 @@ void ConstructeurSurfaceParProchVoisin::construireSurface(Surface& surface, cons
     // Point de départ : le point avec le plus petit ID
     auto start_it = min_element(points.begin(), points.end(), 
         [](const shared_ptr<PointBase>& a, const shared_ptr<PointBase>& b) {
-            return a->getId() < b->getId();
+            return a->obtenirId() < b->obtenirId();
         });
     std::size_t currentIndex = distance(points.begin(), start_it);
     
     used[currentIndex] = true;
-    surface.addPoint(points[currentIndex]);
+    surface.ajouterPoint(points[currentIndex]);
 
     for (size_t step = 1; step < n; ++step) {
         size_t nextIndex = n;
         double bestDist2 = numeric_limits<double>::max();
 
-        auto [cx, cy] = points[currentIndex]->getXY();
+        auto [cx, cy] = points[currentIndex]->obtenirXY();
 
         for (size_t i = 0; i < n; ++i) {
             if (used[i]) continue;
 
-            auto [x, y] = points[i]->getXY();
+            auto [x, y] = points[i]->obtenirXY();
             const int dx = cx - x;
             const int dy = cy - y;
             const double dist2 = static_cast<double>(dx * dx + dy * dy);
@@ -77,7 +77,7 @@ void ConstructeurSurfaceParProchVoisin::construireSurface(Surface& surface, cons
         }
 
         used[nextIndex] = true;
-        surface.addPoint(points[nextIndex]);
+        surface.ajouterPoint(points[nextIndex]);
         currentIndex = nextIndex;
     }
 }

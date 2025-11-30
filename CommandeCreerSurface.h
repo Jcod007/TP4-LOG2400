@@ -5,9 +5,9 @@
 #include "ConstructeurSurface.h"
 #include <memory>
 
-class CreerSurfaceCommand : public Commande {
+class CommandeCreerSurface : public Commande {
 public:
-    CreerSurfaceCommand(Plan& plan, std::shared_ptr<ConstructeurSurface> builder);
+    CommandeCreerSurface(Plan& plan, std::shared_ptr<ConstructeurSurface> builder);
     void executer() override;
 
 private:

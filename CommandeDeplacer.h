@@ -3,12 +3,12 @@
 #include "Commande.h"
 #include "Plan.h"
 
-class CommanderDéplacer : public Commande
+class CommandeDeplacer : public Commande
 {
     public:
-        CommanderDéplacer(Plan& plan, int id, const pair<int,int>& position);
+        CommandeDeplacer(Plan& plan, int id, const pair<int,int>& position);
         void executer() override;
-        void undo() override;
+        void annuler() override;
     private:
         Plan& m_plan;
         int m_id;

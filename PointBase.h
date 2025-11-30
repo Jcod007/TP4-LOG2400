@@ -1,20 +1,20 @@
 #pragma once
 
 #include <string>
-#include "GraphElement.h"
+#include "ElementGraphique.h"
 
 using namespace std;
 
-class PointBase : public GraphElement {
+class PointBase : public ElementGraphique {
 protected:
     std::pair<int, int> m_xy;
 
 public:
     virtual ~PointBase() = default;
 
-    int getId() const override;
-    virtual std::pair<int, int> getXY() const;
-    virtual void setXY(int x, int y);
-    virtual std::string getTexture() const;
+    int obtenirId() const override;
+    virtual std::pair<int, int> obtenirXY() const;
+    virtual void definirXY(int x, int y);
+    virtual std::string obtenirTexture() const;
     virtual std::string dessiner() const override;
 };

@@ -1,42 +1,42 @@
 #include "Surface.h"
 #include "ConstructeurSurface.h"
-#include "PointCloud.h"
+#include "NuagePoints.h"
 #include "PointBase.h"
 
 using namespace std;
 
-Surface::Surface(shared_ptr<PointCloud> pointCloud)
-    : GraphElement(), pointCloud_(move(pointCloud))
+Surface::Surface(shared_ptr<NuagePoints> pointCloud)
+    : ElementGraphique(), nuagePoints_(move(pointCloud))
 {
 }
 
-void Surface::setConstructeurSurface(shared_ptr<ConstructeurSurface> builder)
+void Surface::definirConstructeurSurface(shared_ptr<ConstructeurSurface> builder)
 {
     constructeurStrategie_ = move(builder);
 }
 
 void Surface::construire()
 {
-    if (!constructeurStrategie_ || !pointCloud_) {
+    if (!constructeurStrategie_ || !nuagePoints_) {
         // si il n'y a pas de nuage de point ou de stratégie, on ne fait rien
         return;
     }
 
     // La stratégie fait le taf
-    constructeurStrategie_->construireSurface(*this, *pointCloud_);
+    constructeurStrategie_->construireSurface(*this, *nuagePoints_);
 }
 
-const vector<shared_ptr<PointBase>>& Surface::getPoints() const
+const vector<shared_ptr<PointBase>>& Surface::obtenirPoints() const
 {
     return points_;
 }
 
-void Surface::clearPoints()
+void Surface::viderPoints()
 {
     points_.clear();
 }
 
-void Surface::addPoint(const shared_ptr<PointBase>& point)
+void Surface::ajouterPoint(const shared_ptr<PointBase>& point)
 {
     points_.push_back(point);
 }

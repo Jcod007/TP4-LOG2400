@@ -1,5 +1,5 @@
 #include "AffichageOrthese.h"
-#include "GraphUtils.h"
+#include "UtilitairesGraphique.h"
 #include "Surface.h" // Added include for Surface
 #include "PointBase.h" // Added include for PointBase
 #include <iostream>
@@ -71,18 +71,18 @@ void AffichageOrthese::afficher(Plan& plan) const {
     int maxY = 0;
     bool pointTrouve = false;
 
-    for (const auto& element : plan.getGraphElements()) {
+    for (const auto& element : plan.obtenirElements()) {
         pair<int, int> pos;
-        if (getPositionIfPoint(element, pos)) {
+        if (obtenirPositionSiPoint(element, pos)) {
             if (pos.first > maxX) maxX = pos.first;
             if (pos.second > maxY) maxY = pos.second;
             pointTrouve = true;
         }
         // Also consider points within surfaces for grid dimensions
         if (auto surface = dynamic_pointer_cast<Surface>(element)) {
-            for (const auto& p : surface->getPoints()) {
+            for (const auto& p : surface->obtenirPoints()) {
                 pair<int, int> p_pos;
-                if (getPositionIfPoint(static_pointer_cast<GraphElement>(p), p_pos)) {
+                if (obtenirPositionSiPoint(static_pointer_cast<ElementGraphique>(p), p_pos)) {
                     if (p_pos.first > maxX) maxX = p_pos.first;
                     if (p_pos.second > maxY) maxY = p_pos.second;
                     pointTrouve = true;
@@ -107,10 +107,10 @@ void AffichageOrthese::afficher(Plan& plan) const {
     vector<vector<string>> grille(hauteur, vector<string>(largeur, " "));
 
     // 3. REMPLIR LA GRILLE AVEC LES POINTS (APPEL AU HOOK)
-    for (const auto& element : plan.getGraphElements()) {
+    for (const auto& element : plan.obtenirElements()) {
         pair<int, int> pos;
         // Si c'est un élément affichable (un point ou décorateur de point)
-        if (getPositionIfPoint(element, pos)) {
+        if (obtenirPositionSiPoint(element, pos)) {
             int x = pos.first;
             int y = pos.second;
             
@@ -124,16 +124,16 @@ void AffichageOrthese::afficher(Plan& plan) const {
     }
 
     // 4. DESSINER LES SURFACES
-    for (const auto& element : plan.getGraphElements()) {
+    for (const auto& element : plan.obtenirElements()) {
         if (auto surface = dynamic_pointer_cast<Surface>(element)) {
-            const auto& surfacePoints = surface->getPoints();
+            const auto& surfacePoints = surface->obtenirPoints();
             if (surfacePoints.size() > 1) {
                 for (size_t i = 0; i < surfacePoints.size(); ++i) {
                     const auto& p1 = surfacePoints[i];
                     const auto& p2 = surfacePoints[(i + 1) % surfacePoints.size()]; // Connect last to first
 
                     pair<int, int> pos1, pos2;
-                    if (getPositionIfPoint(static_pointer_cast<GraphElement>(p1), pos1) && getPositionIfPoint(static_pointer_cast<GraphElement>(p2), pos2)) {
+                    if (obtenirPositionSiPoint(static_pointer_cast<ElementGraphique>(p1), pos1) && obtenirPositionSiPoint(static_pointer_cast<ElementGraphique>(p2), pos2)) {
                         tracerLigne(grille, pos1.first, pos1.second, pos2.first, pos2.second);
                     }
                 }

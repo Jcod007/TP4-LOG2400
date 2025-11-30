@@ -4,6 +4,6 @@
 
 class AffichageAvecTexture : public AffichageOrthese {
 protected:
-    std::string obtenirRepresentation(std::shared_ptr<GraphElement> element) const override;
+    std::string obtenirRepresentation(std::shared_ptr<ElementGraphique> element) const override;
     
 };

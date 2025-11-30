@@ -1,9 +1,9 @@
 #include "ConstructeurSurfaceParOrdreId.h"
 #include "Surface.h"
-#include "PointCloud.h"
+#include "NuagePoints.h"
 #include "PointBase.h"
 #include "Point.h"
-#include "GraphElement.h"
+#include "ElementGraphique.h"
 
 #include <vector>
 #include <memory>
@@ -11,14 +11,14 @@
 /**
  * Construire la surface dans l'ordre des IDs :
  * - on récupère tous les PointBase du nuage
- * - on les trie par getId()
+ * - on les trie par obtenirId()
  * - on les ajoute à la Surface
  */
-void ConstructeurSurfaceParOrdreId::construireSurface(Surface& surface, const PointCloud& nuage)
+void ConstructeurSurfaceParOrdreId::construireSurface(Surface& surface, const NuagePoints& nuage)
 {
-    surface.clearPoints();
+    surface.viderPoints();
 
-    const auto& elements = nuage.getPoints();
+    const auto& elements = nuage.obtenirPoints();
 
     std::vector<std::shared_ptr<PointBase>> points;
     points.reserve(elements.size());
@@ -35,11 +35,11 @@ void ConstructeurSurfaceParOrdreId::construireSurface(Surface& surface, const Po
     std::sort(points.begin(), points.end(),
               [](const std::shared_ptr<PointBase>& a,
                  const std::shared_ptr<PointBase>& b) {
-                  return a->getId() < b->getId();
+                  return a->obtenirId() < b->obtenirId();
               });
 
     // Ajout dans la surface dans l'ordre trié
     for (const auto& p : points) {
-        surface.addPoint(p);
+        surface.ajouterPoint(p);
     }
 }

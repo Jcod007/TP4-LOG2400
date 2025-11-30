@@ -3,6 +3,6 @@
 Texture_F::Texture_F(std::shared_ptr<PointBase> component)
     : Texture(component) {}
 
-std::string Texture_F::getTexture() const {
-    return m_element->getTexture() + "#";
+std::string Texture_F::obtenirTexture() const {
+    return m_element->obtenirTexture() + "#";
 }

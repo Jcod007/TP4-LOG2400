@@ -6,5 +6,5 @@
 
 class ConstructeurSurfaceParOrdreId : public ConstructeurSurface {
 public:
-    void construireSurface(Surface& surface, const PointCloud& nuage) override;
+    void construireSurface(Surface& surface, const NuagePoints& nuage) override;
 };

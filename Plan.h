@@ -1,7 +1,7 @@
 #pragma once
 
-#include "GraphElement.h"
-#include "PointCloud.h"
+#include "ElementGraphique.h"
+#include "NuagePoints.h"
 #include "Surface.h"
 #include "ConstructeurSurface.h"
 #include <vector>
@@ -16,18 +16,18 @@ class Plan
     public:
         Plan() = default;
         ~Plan() = default;
-        vector<shared_ptr<GraphElement>> getGraphElements() const;
-        shared_ptr<PointCloud> getNuagesByTexture(const string& texture) const;
-        shared_ptr<PointCloud> getOrCreateNuageByTexture(string texture);
-        shared_ptr<GraphElement> getGraphElementById(int id);
-        void setGraphElements(vector<shared_ptr<GraphElement>> graphElements);
-        void supprimerGraphElementById(int id);
-        void deplacerGraphElementById(int id, const pair<int,int>& position);
-        shared_ptr<PointCloud> fusionEnNuage(vector<int> ids, vector<string> textures);
+        vector<shared_ptr<ElementGraphique>> obtenirElements() const;
+        shared_ptr<NuagePoints> obtenirNuagesParTexture(const string& texture) const;
+        shared_ptr<NuagePoints> obtenirOuCreerNuageParTexture(string texture);
+        shared_ptr<ElementGraphique> obtenirElementGraphiqueParId(int id);
+        void definirElementsGraphiques(vector<shared_ptr<ElementGraphique>> graphElements);
+        void supprimerElementGraphiqueParId(int id);
+        void deplacerElementGraphiqueParId(int id, const pair<int,int>& position);
+        shared_ptr<NuagePoints> fusionnerEnNuage(vector<int> ids, vector<string> textures);
         void creerSurface(int cloudId, shared_ptr<ConstructeurSurface> builder);
-        void addGraphElement(shared_ptr<GraphElement> element);
+        void ajouterElementGraphique(shared_ptr<ElementGraphique> element);
 
     
     private:
-        vector<shared_ptr<GraphElement>> m_graphElements;
+        vector<shared_ptr<ElementGraphique>> m_elementsGraphiques;
 };

@@ -1,10 +1,10 @@
-#include "PointFactory.h"
+#include "FabriquePoint.h"
 #include "Point.h"
 #include <sstream>
 #include <algorithm>
 
-vector<shared_ptr<GraphElement>> PointFactory::creerPointsDepuisChaine(const string& ligne) {
-    vector<shared_ptr<GraphElement>> points;
+vector<shared_ptr<ElementGraphique>> FabriquePoint::creerPointsDepuisChaine(const string& ligne) {
+    vector<shared_ptr<ElementGraphique>> points;
     
     // On crée un flux de lecture (istringstream) à partir de la chaîne ligne.
     istringstream iss(ligne);
@@ -28,10 +28,10 @@ vector<shared_ptr<GraphElement>> PointFactory::creerPointsDepuisChaine(const str
         }
     }
     
-    // Convertit en vecteur de shared_ptr<GraphElement>
+    // Convertit en vecteur de shared_ptr<ElementGraphique>
     return points;
 }
 
-shared_ptr<Point> PointFactory::creerPoint(int x, int y) {
+shared_ptr<Point> FabriquePoint::creerPoint(int x, int y) {
     return make_shared<Point>(make_pair(x, y));
 }

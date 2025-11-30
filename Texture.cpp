@@ -6,18 +6,18 @@ Texture::Texture(std::shared_ptr<PointBase> element)
 
 Texture::~Texture() = default;
 
-int Texture::getId() const {
-    return m_element->getId();
+int Texture::obtenirId() const {
+    return m_element->obtenirId();
 }
 
-std::pair<int, int> Texture::getXY() const {
-    return m_element->getXY();
+std::pair<int, int> Texture::obtenirXY() const {
+    return m_element->obtenirXY();
 }
 
-std::string Texture::getTexture() const {
-    return m_element->getTexture();
+std::string Texture::obtenirTexture() const {
+    return m_element->obtenirTexture();
 }
 
-void Texture::setXY(int x, int y){
-    m_element->setXY(x, y); 
+void Texture::definirXY(int x, int y){
+    m_element->definirXY(x, y); 
 }

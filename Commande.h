@@ -4,6 +4,6 @@ class Commande
 {
     public:
         virtual void executer() = 0;
-        virtual void undo() {}
+        virtual void annuler() {}
         virtual ~Commande() = default;
 };

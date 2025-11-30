@@ -6,19 +6,19 @@
 #include <algorithm>
 #include "Plan.h"
 #include "Point.h"
-#include "PointFactory.h"
+#include "FabriquePoint.h"
 #include <memory>
 #include "Invocateur.h"
 #include "CommandeAffichage.h"
-#include "CommanderSupprimer.h"
-#include "CommanderDéplacer.h"
-#include "FusionEnNuageCommand.h"
+#include "CommandeSupprimer.h"
+#include "CommandeDeplacer.h"
+#include "CommandeFusionEnNuage.h"
 #include "AffichageAvecTexture.h"
 #include "AffichageAvecID.h"
 #include "Surface.h"
 #include "ConstructeurSurfaceParOrdreId.h"
 #include "ConstructeurSurfaceParProchVoisin.h"
-#include "CreerSurfaceCommand.h"
+#include "CommandeCreerSurface.h"
 
 using namespace std;
 
@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
     Plan plan;
     Invocateur invocateur;
     
-    plan.setGraphElements(PointFactory::creerPointsDepuisChaine(args));
+    plan.definirElementsGraphiques(FabriquePoint::creerPointsDepuisChaine(args));
     
     // Ce sont différentes textures possibles. Seules les 2 premières sont utilisées dans les scénarios du TP.
     vector<string> texturesNuages = {"o", "#", "$"};
@@ -115,8 +115,8 @@ int main(int argc, char* argv[]) {
                 ids.push_back(id);
             }
             
-            // Utiliser la commande FusionEnNuageCommand
-            shared_ptr<Commande> commande = make_shared<FusionEnNuageCommand>(plan, ids, texturesNuages);
+            // Utiliser la commande CommandeFusionEnNuage
+            shared_ptr<Commande> commande = make_shared<CommandeFusionEnNuage>(plan, ids, texturesNuages);
             invocateur.executer(commande);
         }
         else if (cmd == "s")
@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
             string idStr;
             getline(cin, idStr);
             int id = stoi(idStr);
-            shared_ptr<Commande> commande = make_shared<CommanderSupprimer>(plan, id);
+            shared_ptr<Commande> commande = make_shared<CommandeSupprimer>(plan, id);
             invocateur.executer(commande);
         }
         
@@ -143,22 +143,22 @@ int main(int argc, char* argv[]) {
             
             pair<int,int> newPos = {x,y};
             
-            shared_ptr<Commande> commande = make_shared<CommanderDéplacer>(plan, id, newPos);
+            shared_ptr<Commande> commande = make_shared<CommandeDeplacer>(plan, id, newPos);
             invocateur.executer(commande);
         }
         else if (cmd == "c1") {
-            shared_ptr<Commande> commande = make_shared<CreerSurfaceCommand>(plan, make_shared<ConstructeurSurfaceParOrdreId>());
+            shared_ptr<Commande> commande = make_shared<CommandeCreerSurface>(plan, make_shared<ConstructeurSurfaceParOrdreId>());
             invocateur.executer(commande);
         }
         else if (cmd == "c2") {
-            shared_ptr<Commande> commande = make_shared<CreerSurfaceCommand>(plan, make_shared<ConstructeurSurfaceParProchVoisin>());
+            shared_ptr<Commande> commande = make_shared<CommandeCreerSurface>(plan, make_shared<ConstructeurSurfaceParProchVoisin>());
             invocateur.executer(commande);
         }
         else if (cmd == "u") {
             invocateur.annuler();
         }
         else if (cmd == "r") {
-            invocateur.rétablir();
+            invocateur.retablir();
         }
         
     }
