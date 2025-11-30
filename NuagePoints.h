@@ -11,12 +11,12 @@ private:
     std::string m_texture;
 
 public:
-    NuagePoints(string texture);
-    NuagePoints(const std::vector<std::shared_ptr<ElementGraphique>>& points, string texture);
+    NuagePoints(std::string texture);
+    NuagePoints(const std::vector<std::shared_ptr<ElementGraphique>>& points, std::string texture);
     std::vector<int> obtenirTousIdsPointsRecursivement() const;
     const std::vector<std::shared_ptr<ElementGraphique>>& obtenirPoints() const;
-    void ajouterEnfant(shared_ptr<ElementGraphique> enfant) override;
-    void ajouterEnfants(const vector<shared_ptr<ElementGraphique>>& enfants) override;
+    void ajouterEnfant(std::shared_ptr<ElementGraphique> enfant) override;
+    void ajouterEnfants(const std::vector<std::shared_ptr<ElementGraphique>>& enfants) override;
     void supprimerPointParId(int id);
     bool contientPoint(int id) const;
     std::string obtenirTexture() const;

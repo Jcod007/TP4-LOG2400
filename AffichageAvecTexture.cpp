@@ -1,14 +1,15 @@
 #include "AffichageAvecTexture.h"
+#include "PointBase.h"
+using namespace std;
 
 std::string AffichageAvecTexture::obtenirRepresentation(std::shared_ptr<ElementGraphique> element) const {
-        // Tenter de convertir en PointBase pour avoir la texture
-        auto ptr = std::dynamic_pointer_cast<PointBase>(element);
-        
-        if (ptr) {
-            std::string txt = ptr->obtenirTexture();
-            // Si texture vide, on met un point par défaut (selon convention)
-            if (txt.empty() || txt == "\"\"") return ".";
-            return txt;
+    if (auto point = dynamic_pointer_cast<PointBase>(element)) {
+        string texture = point->obtenirTexture();
+        // Si la texture est vide ou contient seulement des espaces, retourner "."
+        if (texture.empty() || texture == " " || texture == "") {
+            return ".";
         }
-        return "?";
+        return texture;
+    }
+    return " "; // Default representation for non-point elements
 }

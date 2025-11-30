@@ -1,6 +1,7 @@
 #include "CommandeAffichage.h"
+using namespace std;
 
-CommandeAffichage::CommandeAffichage(unique_ptr<Affichage> affichage, Plan& plan):m_affichage(move(affichage)), m_plan(plan)
+CommandeAffichage::CommandeAffichage(std::unique_ptr<Affichage> affichage, Plan& plan):m_affichage(std::move(affichage)), m_plan(plan)
 {
 
 }

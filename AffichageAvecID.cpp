@@ -1,6 +1,5 @@
 #include "AffichageAvecID.h"
-
+using namespace std;
 std::string AffichageAvecID::obtenirRepresentation(std::shared_ptr<ElementGraphique> element) const {
-        // On retourne simplement l'ID
-        return std::to_string(element->obtenirId());
+    return std::to_string(element->obtenirId());
 }

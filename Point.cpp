@@ -1,4 +1,5 @@
 #include "Point.h"
+using namespace std;
 
 Point::Point(const std::pair<int, int>& xy) {
     m_xy = xy;

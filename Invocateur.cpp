@@ -1,25 +1,30 @@
 #include "Invocateur.h"
 #include <iostream>
+using namespace std;
 
 void Invocateur::executer(shared_ptr<Commande> cmd)
 {
     if (cmd)
     {
         cmd->executer();
-        pile_annulation_.push_back(cmd);
-        // A new command clears the redo stack
-        pile_retablissement_.clear();
+        // Only add to undo stack if the command is undoable
+        if (cmd->estAnnulable())
+        {
+            m_pileAnnulation.push_back(cmd);
+            // A new command clears the redo stack
+            m_pileRetablissement.clear();
+        }
     }
 }
 
 void Invocateur::annuler()
 {
-    if (!pile_annulation_.empty())
+    if (!m_pileAnnulation.empty())
     {
-        shared_ptr<Commande> last_cmd = pile_annulation_.back();
-        pile_annulation_.pop_back();
+        shared_ptr<Commande> last_cmd = m_pileAnnulation.back();
+        m_pileAnnulation.pop_back();
         last_cmd->annuler();
-        pile_retablissement_.push_back(last_cmd);
+        m_pileRetablissement.push_back(last_cmd);
         cout << "Commande annulee." << endl;
     }
     else
@@ -30,12 +35,12 @@ void Invocateur::annuler()
 
 void Invocateur::retablir()
 {
-    if (!pile_retablissement_.empty())
+    if (!m_pileRetablissement.empty())
     {
-        shared_ptr<Commande> last_undone_cmd = pile_retablissement_.back();
-        pile_retablissement_.pop_back();
+        shared_ptr<Commande> last_undone_cmd = m_pileRetablissement.back();
+        m_pileRetablissement.pop_back();
         last_undone_cmd->executer();
-        pile_annulation_.push_back(last_undone_cmd);
+        m_pileAnnulation.push_back(last_undone_cmd);
         cout << "Commande retablie." << endl;
     }
     else

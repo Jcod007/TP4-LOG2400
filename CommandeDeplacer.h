@@ -6,12 +6,12 @@
 class CommandeDeplacer : public Commande
 {
     public:
-        CommandeDeplacer(Plan& plan, int id, const pair<int,int>& position);
+        CommandeDeplacer(Plan& plan, int id, const std::pair<int,int>& position);
         void executer() override;
         void annuler() override;
     private:
         Plan& m_plan;
         int m_id;
-        pair<int,int> m_position;
-        pair<int,int> m_anciennePosition;
+        std::pair<int,int> m_position;
+        std::pair<int,int> m_anciennePosition;
 };

@@ -3,7 +3,6 @@
 #include <string>
 #include "ElementGraphique.h"
 
-using namespace std;
 
 class PointBase : public ElementGraphique {
 protected:

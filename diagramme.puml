@@ -35,20 +35,26 @@ class Texture_F {
 }
 
 class NuagePoints {
-    - vector<shared_ptr<ElementGraphique>> m_enfants
+    - vector<shared_ptr<ElementGraphique>> m_points
     - string m_texture
     + void ajouterEnfant(shared_ptr<ElementGraphique>)
+    + void ajouterEnfants(vector<shared_ptr<ElementGraphique>>)
     + vector<int> obtenirTousIdsPointsRecursivement()
     + string obtenirTexture()
+    + string dessiner()
 }
 
 class Surface {
-    - shared_ptr<NuagePoints> nuagePoints_
-    - shared_ptr<ConstructeurSurface> constructeurStrategie_
-    - vector<shared_ptr<PointBase>> points_
+    - shared_ptr<NuagePoints> m_nuagePoints
+    - shared_ptr<ConstructeurSurface> m_constructeurStrategie
+    - vector<shared_ptr<PointBase>> m_points
     + void definirConstructeurSurface(shared_ptr<ConstructeurSurface>)
     + void construire()
     + void ajouterPoint(shared_ptr<PointBase>)
+    + const vector<shared_ptr<PointBase>>& obtenirPoints()
+    + void viderPoints()
+    + shared_ptr<NuagePoints> obtenirNuage()
+    + string dessiner()
 }
 
 class Plan {
@@ -57,6 +63,8 @@ class Plan {
     + shared_ptr<NuagePoints> fusionnerEnNuage(vector<int>, vector<string>)
     + void deplacerElementGraphiqueParId(int, pair<int,int>)
     + void supprimerElementGraphiqueParId(int)
+    + vector<shared_ptr<ElementGraphique>> obtenirElements()
+    + shared_ptr<ElementGraphique> obtenirElementGraphiqueParId(int)
 }
 
 interface ConstructeurSurface {
@@ -71,17 +79,55 @@ class ConstructeurSurfaceParProchVoisin {
     + void construireSurface(Surface&, const NuagePoints&)
 }
 
-interface Commande {
+abstract class Commande {
     + {abstract} void executer()
-    + {abstract} void annuler()
+    + virtual void annuler()
+    + virtual bool estAnnulable()
 }
 
 class Invocateur {
-    - vector<shared_ptr<Commande>> pile_annulation_
-    - vector<shared_ptr<Commande>> pile_retablissement_
+    - vector<shared_ptr<Commande>> m_pileAnnulation
+    - vector<shared_ptr<Commande>> m_pileRetablissement
     + void executer(shared_ptr<Commande>)
     + void annuler()
     + void retablir()
+}
+
+class CommandeAffichage {
+    - unique_ptr<Affichage> m_affichage
+    - Plan& m_plan
+    + void executer()
+    + bool estAnnulable() : false
+}
+
+class CommandeSupprimer {
+    - Plan& m_plan
+    - int m_id
+    + void executer()
+    + void annuler()
+}
+
+class CommandeDeplacer {
+    - Plan& m_plan
+    - int m_id
+    - pair<int,int> m_position
+    - pair<int,int> m_anciennePosition
+    + void executer()
+    + void annuler()
+}
+
+class CommandeFusionEnNuage {
+    - Plan& m_plan
+    - vector<int> m_ids
+    - vector<string> m_textures
+    + void executer()
+    + void annuler()
+}
+
+class CommandeCreerSurface {
+    - Plan& m_plan
+    - shared_ptr<ConstructeurSurface> m_builder
+    + void executer()
 }
 
 interface Affichage {

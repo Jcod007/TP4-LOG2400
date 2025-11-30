@@ -18,13 +18,14 @@ public:
     const std::vector<std::shared_ptr<PointBase>>& obtenirPoints() const;
     void viderPoints();
     void ajouterPoint(const std::shared_ptr<PointBase>& point);
+    std::shared_ptr<NuagePoints> obtenirNuage() const;
 
     std::string dessiner() const override {
-        return "Surface"; // Placeholder
+        return "";
     }
 
 private:
-    std::shared_ptr<NuagePoints> nuagePoints_;
-    std::shared_ptr<ConstructeurSurface> constructeurStrategie_;
-    std::vector<std::shared_ptr<PointBase>> points_;
+    std::shared_ptr<NuagePoints> m_nuagePoints;
+    std::shared_ptr<ConstructeurSurface> m_constructeurStrategie;
+    std::vector<std::shared_ptr<PointBase>> m_points;
 };

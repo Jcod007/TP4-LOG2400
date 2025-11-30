@@ -8,4 +8,4 @@
 bool obtenirPositionSiPoint(const std::shared_ptr<ElementGraphique>& elem, std::pair<int,int>& outPos);
 
 // Retourne true et définit la position si l'élément est un PointBase
-bool definirPositionSiPoint(const std::shared_ptr<ElementGraphique>& elem, int x, int y);
+bool definirPositionSiPoint(std::shared_ptr<ElementGraphique>& elem, int x, int y);

@@ -1,4 +1,5 @@
 #include "PointBase.h"
+using namespace std;
 
 int PointBase::obtenirId() const {
     return m_id;

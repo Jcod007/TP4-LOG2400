@@ -10,6 +10,6 @@ class Commande_O : public Commande
         void executer() override;
     
     private:
-        unique_ptr<Affichage> m_affichage;
+        std::unique_ptr<Affichage> m_affichage;
         Plan& m_plan;
 };  

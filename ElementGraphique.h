@@ -3,7 +3,6 @@
 #include <memory>
 #include <vector>
 
-using namespace std;
 
 class ElementGraphique {
 protected:
@@ -15,7 +14,7 @@ public:
     virtual ~ElementGraphique() = default;
 
     virtual int obtenirId() const;
-    virtual string dessiner() const = 0;
-    virtual void ajouterEnfant(shared_ptr<ElementGraphique> enfant) {}
-    virtual void ajouterEnfants(const vector<shared_ptr<ElementGraphique>>& enfants) {}
+    virtual std::string dessiner() const = 0;
+    virtual void ajouterEnfant(std::shared_ptr<ElementGraphique> enfant) {}
+    virtual void ajouterEnfants(const std::vector<std::shared_ptr<ElementGraphique>>& enfants) {}
 };

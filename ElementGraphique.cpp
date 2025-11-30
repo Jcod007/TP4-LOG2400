@@ -1,4 +1,5 @@
 #include "ElementGraphique.h"
+using namespace std;
 
 int ElementGraphique::m_prochainId = 0;
 

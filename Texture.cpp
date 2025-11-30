@@ -1,4 +1,5 @@
 #include "Texture.h"
+using namespace std;
 
 Texture::Texture(std::shared_ptr<PointBase> element)
     : m_element(element) {

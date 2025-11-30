@@ -172,47 +172,41 @@ shared_ptr<NuagePoints> Plan::fusionnerEnNuage(vector<int> ids, vector<string> t
     return nouveauNuage;
 }
 
-
-
-
-
 void Plan::ajouterElementGraphique(shared_ptr<ElementGraphique> element) {
     if (element) {
         m_elementsGraphiques.push_back(element);
     }
 }
-void Plan::creerSurface(int cloudId, shared_ptr<ConstructeurSurface> builder) {
 
+void Plan::creerSurface(int cloudId, shared_ptr<ConstructeurSurface> builder) {
     shared_ptr<NuagePoints> targetCloud = nullptr;
 
     for (const auto& element : m_elementsGraphiques) {
-
         if (auto cloud = dynamic_pointer_cast<NuagePoints>(element)) {
-
             if (cloud->obtenirId() == cloudId) {
-
                 targetCloud = cloud;
-
                 break;
-
             }
-
         }
-
     }
-
-
 
     if (targetCloud) {
+        // Supprimer les surfaces existantes associées à ce nuage
+        auto it = std::remove_if(m_elementsGraphiques.begin(), m_elementsGraphiques.end(),
+            [&targetCloud](const std::shared_ptr<ElementGraphique>& element) {
+                if (auto surface = std::dynamic_pointer_cast<Surface>(element)) {
+                    return surface->obtenirNuage() == targetCloud;
+                }
+                return false;
+            });
+        
+        if (it != m_elementsGraphiques.end()) {
+            m_elementsGraphiques.erase(it, m_elementsGraphiques.end());
+        }
 
         auto surface = make_shared<Surface>(targetCloud);
-
         surface->definirConstructeurSurface(builder);
-
         surface->construire();
-
         m_elementsGraphiques.push_back(surface);
-
     }
-
 }

@@ -2,6 +2,7 @@
 #include "Point.h"
 #include <sstream>
 #include <algorithm>
+using namespace std;
 
 vector<shared_ptr<ElementGraphique>> FabriquePoint::creerPointsDepuisChaine(const string& ligne) {
     vector<shared_ptr<ElementGraphique>> points;

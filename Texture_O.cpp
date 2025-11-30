@@ -1,4 +1,5 @@
 #include "Texture_O.h"
+using namespace std;
 
 Texture_O::Texture_O(std::shared_ptr<PointBase> component)
     : Texture(component) {}

@@ -4,6 +4,7 @@
 #include "PointBase.h"
 #include "Texture_O.h"
 #include "Texture_F.h"
+using namespace std;
 
 NuagePoints::NuagePoints(string texture) : m_texture(texture) {
 }
@@ -12,11 +13,11 @@ std::vector<int> NuagePoints::obtenirTousIdsPointsRecursivement() const {
     std::vector<int> ids;
     for (const auto& child : m_points) {
         // Cas feuille (PointBase)
-        if (auto point = std::dynamic_pointer_cast<PointBase>(child)) {
+        if (auto point = dynamic_pointer_cast<PointBase>(child)) {
             ids.push_back(point->obtenirId());
         } 
         // Cas noeud composite (NuagePoints) -> Appel récursif
-        else if (auto cloud = std::dynamic_pointer_cast<NuagePoints>(child)) {
+        else if (auto cloud = dynamic_pointer_cast<NuagePoints>(child)) {
             std::vector<int> childIds = cloud->obtenirTousIdsPointsRecursivement();
             ids.insert(ids.end(), childIds.begin(), childIds.end());
         }
@@ -32,7 +33,7 @@ const std::vector<std::shared_ptr<ElementGraphique>>& NuagePoints::obtenirPoints
 }
 
 void NuagePoints::supprimerPointParId(int id) {
-    auto it = std::find_if(m_points.begin(), m_points.end(),
+    auto it = find_if(m_points.begin(), m_points.end(),
         [id](const std::shared_ptr<ElementGraphique>& element) {
             return element->obtenirId() == id;
         });
@@ -43,7 +44,7 @@ void NuagePoints::supprimerPointParId(int id) {
 }
 
 bool NuagePoints::contientPoint(int id) const {
-    return std::find_if(m_points.begin(), m_points.end(),
+    return find_if(m_points.begin(), m_points.end(),
         [id](const std::shared_ptr<ElementGraphique>& element) {
             return element->obtenirId() == id;
         }) != m_points.end();

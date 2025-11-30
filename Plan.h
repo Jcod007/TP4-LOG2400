@@ -8,26 +8,24 @@
 #include <memory>
 #include <string>
 
-using namespace std;
-
 
 class Plan
 {
     public:
         Plan() = default;
         ~Plan() = default;
-        vector<shared_ptr<ElementGraphique>> obtenirElements() const;
-        shared_ptr<NuagePoints> obtenirNuagesParTexture(const string& texture) const;
-        shared_ptr<NuagePoints> obtenirOuCreerNuageParTexture(string texture);
-        shared_ptr<ElementGraphique> obtenirElementGraphiqueParId(int id);
-        void definirElementsGraphiques(vector<shared_ptr<ElementGraphique>> graphElements);
+        std::vector<std::shared_ptr<ElementGraphique>> obtenirElements() const;
+        std::shared_ptr<NuagePoints> obtenirNuagesParTexture(const std::string& texture) const;
+        std::shared_ptr<NuagePoints> obtenirOuCreerNuageParTexture(std::string texture);
+        std::shared_ptr<ElementGraphique> obtenirElementGraphiqueParId(int id);
+        void definirElementsGraphiques(std::vector<std::shared_ptr<ElementGraphique>> graphElements);
         void supprimerElementGraphiqueParId(int id);
-        void deplacerElementGraphiqueParId(int id, const pair<int,int>& position);
-        shared_ptr<NuagePoints> fusionnerEnNuage(vector<int> ids, vector<string> textures);
-        void creerSurface(int cloudId, shared_ptr<ConstructeurSurface> builder);
-        void ajouterElementGraphique(shared_ptr<ElementGraphique> element);
+        void deplacerElementGraphiqueParId(int id, const std::pair<int,int>& position);
+        std::shared_ptr<NuagePoints> fusionnerEnNuage(std::vector<int> ids, std::vector<std::string> textures);
+        void creerSurface(int cloudId, std::shared_ptr<ConstructeurSurface> builder);
+        void ajouterElementGraphique(std::shared_ptr<ElementGraphique> element);
 
     
     private:
-        vector<shared_ptr<ElementGraphique>> m_elementsGraphiques;
+        std::vector<std::shared_ptr<ElementGraphique>> m_elementsGraphiques;
 };
