@@ -5,15 +5,15 @@
 #include <vector>
 
 class PointCloud;
-class SurfaceBuilder;
+class ConstructeurSurface;
 class PointBase;
 
 class Surface : public GraphElement {
 public:
     Surface(std::shared_ptr<PointCloud> pointCloud);
 
-    void setSurfaceBuilder(std::shared_ptr<SurfaceBuilder> builder);
-    void build();
+    void setConstructeurSurface(std::shared_ptr<ConstructeurSurface> builder);
+    void construire();
 
     const std::vector<std::shared_ptr<PointBase>>& getPoints() const;
     void clearPoints();
@@ -25,6 +25,6 @@ public:
 
 private:
     std::shared_ptr<PointCloud> pointCloud_;
-    std::shared_ptr<SurfaceBuilder> surfaceBuilderStrategie_;
+    std::shared_ptr<ConstructeurSurface> constructeurStrategie_;
     std::vector<std::shared_ptr<PointBase>> points_;
 };

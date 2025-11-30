@@ -174,7 +174,14 @@ shared_ptr<PointCloud> Plan::fusionEnNuage(vector<int> ids, vector<string> textu
 
 
 
-void Plan::creerSurface(int cloudId, shared_ptr<SurfaceBuilder> builder) {
+
+
+void Plan::addGraphElement(shared_ptr<GraphElement> element) {
+    if (element) {
+        m_graphElements.push_back(element);
+    }
+}
+void Plan::creerSurface(int cloudId, shared_ptr<ConstructeurSurface> builder) {
 
     shared_ptr<PointCloud> targetCloud = nullptr;
 
@@ -200,9 +207,9 @@ void Plan::creerSurface(int cloudId, shared_ptr<SurfaceBuilder> builder) {
 
         auto surface = make_shared<Surface>(targetCloud);
 
-        surface->setSurfaceBuilder(builder);
+        surface->setConstructeurSurface(builder);
 
-        surface->build();
+        surface->construire();
 
         m_graphElements.push_back(surface);
 

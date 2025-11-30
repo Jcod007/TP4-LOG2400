@@ -2,15 +2,15 @@
 
 #include "Commande.h"
 #include "Plan.h"
-#include "SurfaceBuilder.h"
+#include "ConstructeurSurface.h"
 #include <memory>
 
 class CreerSurfaceCommand : public Commande {
 public:
-    CreerSurfaceCommand(Plan& plan, std::shared_ptr<SurfaceBuilder> builder);
+    CreerSurfaceCommand(Plan& plan, std::shared_ptr<ConstructeurSurface> builder);
     void executer() override;
 
 private:
     Plan& m_plan;
-    std::shared_ptr<SurfaceBuilder> m_builder;
+    std::shared_ptr<ConstructeurSurface> m_builder;
 };

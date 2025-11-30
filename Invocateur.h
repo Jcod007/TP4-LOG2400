@@ -9,10 +9,11 @@ using namespace std;
 class Invocateur
 {
     public:
-        void setCommande(shared_ptr<Commande> cmd);
-        void executerCommande();
+        void executer(shared_ptr<Commande> cmd);
+        void annuler();
+        void rétablir();
         
     private:
-        shared_ptr<Commande> m_commande;
-        vector<shared_ptr<Commande>> m_historique;   
+        vector<shared_ptr<Commande>> pile_annulation_;
+        vector<shared_ptr<Commande>> pile_rétablissement_;
 };

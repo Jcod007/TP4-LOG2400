@@ -6,13 +6,13 @@
 
 using namespace std;
 
-class Commande_A : public Commande
+class CommandeAffichage : public Commande
 {
 
     public:
         void executer() override;
-        ~Commande_A() override = default;
-        Commande_A(unique_ptr<Affichage> affichage, Plan& plan);
+        ~CommandeAffichage() override = default;
+        CommandeAffichage(unique_ptr<Affichage> affichage, Plan& plan);
     
     private:
         unique_ptr<Affichage> m_affichage;

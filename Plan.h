@@ -3,7 +3,7 @@
 #include "GraphElement.h"
 #include "PointCloud.h"
 #include "Surface.h"
-#include "SurfaceBuilder.h"
+#include "ConstructeurSurface.h"
 #include <vector>
 #include <memory>
 #include <string>
@@ -24,7 +24,9 @@ class Plan
         void supprimerGraphElementById(int id);
         void deplacerGraphElementById(int id, const pair<int,int>& position);
         shared_ptr<PointCloud> fusionEnNuage(vector<int> ids, vector<string> textures);
-        void creerSurface(int cloudId, shared_ptr<SurfaceBuilder> builder);
+        void creerSurface(int cloudId, shared_ptr<ConstructeurSurface> builder);
+        void addGraphElement(shared_ptr<GraphElement> element);
+
     
     private:
         vector<shared_ptr<GraphElement>> m_graphElements;

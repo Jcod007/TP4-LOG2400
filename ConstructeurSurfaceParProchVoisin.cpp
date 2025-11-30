@@ -1,4 +1,4 @@
-#include "NearestNeighborSurfaceBuilder.h"
+#include "ConstructeurSurfaceParProchVoisin.h"
 #include "Surface.h"
 #include "PointCloud.h"
 #include "PointBase.h"
@@ -17,11 +17,11 @@ using namespace std;
  * - à chaque étape, on ajoute le point non encore utilisé le plus proche du point courant (on calcule la distance euclidienne aux autres point et on prend le minimum)
  *   - on répète jusqu'à ce que tous les points soient utilisés
  */
-void NearestNeighborSurfaceBuilder::buildSurface(Surface& surface, const PointCloud& pointCloud)
+void ConstructeurSurfaceParProchVoisin::construireSurface(Surface& surface, const PointCloud& nuage)
 {
     surface.clearPoints();
 
-    const auto& elements = pointCloud.getPoints();
+    const auto& elements = nuage.getPoints();
 
     vector<shared_ptr<PointBase>> points;
     points.reserve(elements.size());

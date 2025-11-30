@@ -3,6 +3,6 @@
 
 class AffichageAvecID : public AffichageOrthese {
 protected:
-    std::string getRepresentation(std::shared_ptr<GraphElement> element) const override;
+    std::string obtenirRepresentation(std::shared_ptr<GraphElement> element) const override;
     
 };

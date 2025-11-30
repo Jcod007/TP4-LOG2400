@@ -1,5 +1,5 @@
 #include "Surface.h"
-#include "SurfaceBuilder.h"
+#include "ConstructeurSurface.h"
 #include "PointCloud.h"
 #include "PointBase.h"
 
@@ -10,20 +10,20 @@ Surface::Surface(shared_ptr<PointCloud> pointCloud)
 {
 }
 
-void Surface::setSurfaceBuilder(shared_ptr<SurfaceBuilder> builder)
+void Surface::setConstructeurSurface(shared_ptr<ConstructeurSurface> builder)
 {
-    surfaceBuilderStrategie_ = move(builder);
+    constructeurStrategie_ = move(builder);
 }
 
-void Surface::build()
+void Surface::construire()
 {
-    if (!surfaceBuilderStrategie_ || !pointCloud_) {
+    if (!constructeurStrategie_ || !pointCloud_) {
         // si il n'y a pas de nuage de point ou de stratégie, on ne fait rien
         return;
     }
 
     // La stratégie fait le taf
-    surfaceBuilderStrategie_->buildSurface(*this, *pointCloud_);
+    constructeurStrategie_->construireSurface(*this, *pointCloud_);
 }
 
 const vector<shared_ptr<PointBase>>& Surface::getPoints() const

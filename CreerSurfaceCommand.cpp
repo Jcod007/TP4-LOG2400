@@ -2,7 +2,7 @@
 #include <iostream>
 #include "PointCloud.h" // Include PointCloud for dynamic_pointer_cast
 
-CreerSurfaceCommand::CreerSurfaceCommand(Plan& plan, std::shared_ptr<SurfaceBuilder> builder)
+CreerSurfaceCommand::CreerSurfaceCommand(Plan& plan, std::shared_ptr<ConstructeurSurface> builder)
     : m_plan(plan), m_builder(builder) {}
 
 void CreerSurfaceCommand::executer() {

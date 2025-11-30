@@ -9,39 +9,58 @@
 
 using namespace std;
 
-// Helper function to draw a line on the grid
-void drawLine(vector<vector<string>>& grille, int x1, int y1, int x2, int y2, char lineChar) {
-    bool steep = abs(y2 - y1) > abs(x2 - x1);
-    if (steep) {
-        swap(x1, y1);
-        swap(x2, y2);
-    }
-    if (x1 > x2) {
-        swap(x1, x2);
-        swap(y1, y2);
-    }
-
-    int dx = x2 - x1;
-    int dy = abs(y2 - y1);
-    int error = dx / 2;
-    int ystep = (y1 < y2) ? 1 : -1;
+// Fonction utilitaire pour tracer une ligne sur la grille en utilisant l'algorithme de Bresenham modifié
+// qui sélectionne le caractère approprié pour chaque segment de la ligne.
+void tracerLigne(vector<vector<string>>& grille, int x1, int y1, int x2, int y2) {
+    int dx = abs(x2 - x1);
+    int sx = x1 < x2 ? 1 : -1;
+    int dy = -abs(y2 - y1);
+    int sy = y1 < y2 ? 1 : -1;
+    int err = dx + dy;  // valeur erreur e_xy
+    int x = x1;
     int y = y1;
 
-    for (int x = x1; x <= x2; ++x) {
-        if (steep) {
-            if (y >= 0 && y < grille.size() && x >= 0 && x < grille[0].size()) {
-                if (grille[y][x] == " ") grille[y][x] = lineChar;
-            }
+    while (true) {
+        int pos_prec_x = x;
+        int pos_prec_y = y;
+
+        if (x == x2 && y == y2) break;
+
+        int e2 = 2 * err;
+        bool deplace_x = false;
+        bool deplace_y = false;
+
+        if (e2 >= dy) { // e_xy+e_x > 0
+            err += dy;
+            x += sx;
+            deplace_x = true;
         }
-        else {
-            if (x >= 0 && x < grille.size() && y >= 0 && y < grille[0].size()) {
-                if (grille[y][x] == " ") grille[y][x] = lineChar;
-            }
+        if (e2 <= dx) { // e_xy+e_y < 0
+            err += dx;
+            y += sy;
+            deplace_y = true;
         }
-        error -= dy;
-        if (error < 0) {
-            y += ystep;
-            error += dx;
+
+        // Déterminer le caractère basé sur le mouvement
+        char caracterLigne = ' ';
+        if (deplace_x && deplace_y) {
+            // Mouvement diagonal
+            if ((sx > 0 && sy > 0) || (sx < 0 && sy < 0)) {
+                caracterLigne = '/'; // Pente positive
+            } else {
+                caracterLigne = '\\'; // Pente négative
+            }
+        } else if (deplace_x) {
+            caracterLigne = '-'; // Mouvement horizontal
+        } else if (deplace_y) {
+            caracterLigne = '|'; // Mouvement vertical
+        }
+        
+        // Dessiner le caractère pour le segment commençant à pos_prec_x, pos_prec_y
+        if (pos_prec_x >= 0 && pos_prec_x < grille[0].size() && pos_prec_y >= 0 && pos_prec_y < grille.size()) {
+             if (grille[pos_prec_y][pos_prec_x] == " ") {
+                grille[pos_prec_y][pos_prec_x] = caracterLigne;
+            }
         }
     }
 }
@@ -99,7 +118,7 @@ void AffichageOrthese::afficher(Plan& plan) const {
             if (x >= 0 && x < largeur && y >= 0 && y < hauteur) {
                 // APPEL POLYMORPHE : C'est ici que la magie opère !
                 // La sous-classe décide du texte à afficher.
-                grille[y][x] = getRepresentation(element);
+                grille[y][x] = obtenirRepresentation(element);
             }
         }
     }
@@ -115,17 +134,7 @@ void AffichageOrthese::afficher(Plan& plan) const {
 
                     pair<int, int> pos1, pos2;
                     if (getPositionIfPoint(static_pointer_cast<GraphElement>(p1), pos1) && getPositionIfPoint(static_pointer_cast<GraphElement>(p2), pos2)) {
-                        char lineChar = ' ';
-                        if (pos1.first == pos2.first) { // Vertical line
-                            lineChar = '|';
-                        } else if (pos1.second == pos2.second) { // Horizontal line
-                            lineChar = '-';
-                        } else if ((pos2.second - pos1.second) / (double)(pos2.first - pos1.first) > 0) { // Positive slope
-                            lineChar = '/';
-                        } else { // Negative slope
-                            lineChar = '\\';
-                        }
-                        drawLine(grille, pos1.first, pos1.second, pos2.first, pos2.second, lineChar);
+                        tracerLigne(grille, pos1.first, pos1.second, pos2.first, pos2.second);
                     }
                 }
             }

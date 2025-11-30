@@ -9,20 +9,20 @@
 #include "PointFactory.h"
 #include <memory>
 #include "Invocateur.h"
-#include "Commande_A.h"
-#include "SupprimerCommand.h"
-#include "DeplacerCommand.h"
+#include "CommandeAffichage.h"
+#include "CommanderSupprimer.h"
+#include "CommanderDéplacer.h"
 #include "FusionEnNuageCommand.h"
 #include "AffichageAvecTexture.h"
 #include "AffichageAvecID.h"
 #include "Surface.h"
-#include "IdOrderSurfaceBuilder.h"
-#include "NearestNeighborSurfaceBuilder.h"
+#include "ConstructeurSurfaceParOrdreId.h"
+#include "ConstructeurSurfaceParProchVoisin.h"
 #include "CreerSurfaceCommand.h"
 
 using namespace std;
 
-pair<int,int> parsingPosition(string& posStr)
+pair<int,int> analyserPosition(string& posStr)
 {
             posStr.erase(remove(posStr.begin(), posStr.end(), '('), posStr.end());
             posStr.erase(remove(posStr.begin(), posStr.end(), ')'), posStr.end());
@@ -41,17 +41,19 @@ pair<int,int> parsingPosition(string& posStr)
             return newPos;
 }
 
-void affichageMenu()
+void afficherMenu()
 {
     cout << "Commandes :\n"
          << "a - Afficher les points et les nuages\n"
          << "o1 - Afficher l'orthèse avec les textures des points\n"
          << "o2 - Afficher l'orthèse avec les IDs des points\n"
-         << "f - Fusionner des points dans un nuage (et appliquer texture)\n"
+         << "f - Fusionner des points/nuages dans un nouveau nuage (ex: f 0 2 5)\n"
          << "d - Deplacer un point (ID)\n"
          << "s - Supprimer un point (ID)\n"
-         << "c1 - Creer les surfaces selon l'ordre des IDs\n"
-         << "c2 - Creer les surfaces selon la distance minimale\n"
+         << "u - Annuler la dernière commande (undo)\n"
+         << "r - Réappliquer la dernière commande annulée (redo)\n"
+         << "c1 - Créer les surfaces selon l'ordre des IDs\n"
+         << "c2 - Créer les surfaces selon la distance minimale\n"
          << "q - Quitter\n"
          << "> ";
 }
@@ -81,25 +83,22 @@ int main(int argc, char* argv[]) {
 
     // Menu
     while (true) {
-        affichageMenu();
+        afficherMenu();
         getline(std::cin, cmd);
 
         if (cmd == "q") break;
         if (cmd == "a") {
-            shared_ptr<Commande> commande = make_shared<Commande_A>(make_unique<AffichageListe>(),plan);
-            invocateur.setCommande(commande);
-            invocateur.executerCommande();
+            shared_ptr<Commande> commande = make_shared<CommandeAffichage>(make_unique<AffichageListe>(),plan);
+            invocateur.executer(commande);
         }
 
         else if (cmd == "o1") {
-            shared_ptr<Commande> commande = make_shared<Commande_A>(make_unique<AffichageAvecTexture>(),plan);
-            invocateur.setCommande(commande);
-            invocateur.executerCommande();
+            shared_ptr<Commande> commande = make_shared<CommandeAffichage>(make_unique<AffichageAvecTexture>(),plan);
+            invocateur.executer(commande);
         }
         else if (cmd == "o2") {
-            shared_ptr<Commande> commande = make_shared<Commande_A>(make_unique<AffichageAvecID>(),plan);
-            invocateur.setCommande(commande);
-            invocateur.executerCommande();
+            shared_ptr<Commande> commande = make_shared<CommandeAffichage>(make_unique<AffichageAvecID>(),plan);
+            invocateur.executer(commande);
         }
 
         else if (cmd == "f")
@@ -118,8 +117,7 @@ int main(int argc, char* argv[]) {
             
             // Utiliser la commande FusionEnNuageCommand
             shared_ptr<Commande> commande = make_shared<FusionEnNuageCommand>(plan, ids, texturesNuages);
-            invocateur.setCommande(commande);
-            invocateur.executerCommande();
+            invocateur.executer(commande);
         }
         else if (cmd == "s")
         {
@@ -127,9 +125,8 @@ int main(int argc, char* argv[]) {
             string idStr;
             getline(cin, idStr);
             int id = stoi(idStr);
-            shared_ptr<Commande> commande = make_shared<SupprimerCommand>(plan, id);
-            invocateur.setCommande(commande);
-            invocateur.executerCommande();
+            shared_ptr<Commande> commande = make_shared<CommanderSupprimer>(plan, id);
+            invocateur.executer(commande);
         }
         
         else if (cmd == "d")
@@ -146,19 +143,22 @@ int main(int argc, char* argv[]) {
             
             pair<int,int> newPos = {x,y};
             
-            shared_ptr<Commande> commande = make_shared<DeplacerCommand>(plan, id, newPos);
-            invocateur.setCommande(commande);
-            invocateur.executerCommande();
+            shared_ptr<Commande> commande = make_shared<CommanderDéplacer>(plan, id, newPos);
+            invocateur.executer(commande);
         }
         else if (cmd == "c1") {
-            shared_ptr<Commande> commande = make_shared<CreerSurfaceCommand>(plan, make_shared<IdOrderSurfaceBuilder>());
-            invocateur.setCommande(commande);
-            invocateur.executerCommande();
+            shared_ptr<Commande> commande = make_shared<CreerSurfaceCommand>(plan, make_shared<ConstructeurSurfaceParOrdreId>());
+            invocateur.executer(commande);
         }
         else if (cmd == "c2") {
-            shared_ptr<Commande> commande = make_shared<CreerSurfaceCommand>(plan, make_shared<NearestNeighborSurfaceBuilder>());
-            invocateur.setCommande(commande);
-            invocateur.executerCommande();
+            shared_ptr<Commande> commande = make_shared<CreerSurfaceCommand>(plan, make_shared<ConstructeurSurfaceParProchVoisin>());
+            invocateur.executer(commande);
+        }
+        else if (cmd == "u") {
+            invocateur.annuler();
+        }
+        else if (cmd == "r") {
+            invocateur.rétablir();
         }
         
     }

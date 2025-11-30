@@ -1,6 +1,6 @@
 #include "AffichageAvecTexture.h"
 
-std::string AffichageAvecTexture::getRepresentation(std::shared_ptr<GraphElement> element) const {
+std::string AffichageAvecTexture::obtenirRepresentation(std::shared_ptr<GraphElement> element) const {
         // Tenter de convertir en PointBase pour avoir la texture
         auto ptr = std::dynamic_pointer_cast<PointBase>(element);
         

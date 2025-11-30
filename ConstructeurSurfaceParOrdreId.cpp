@@ -1,4 +1,4 @@
-#include "IdOrderSurfaceBuilder.h"
+#include "ConstructeurSurfaceParOrdreId.h"
 #include "Surface.h"
 #include "PointCloud.h"
 #include "PointBase.h"
@@ -14,11 +14,11 @@
  * - on les trie par getId()
  * - on les ajoute à la Surface
  */
-void IdOrderSurfaceBuilder::buildSurface(Surface& surface, const PointCloud& pointCloud)
+void ConstructeurSurfaceParOrdreId::construireSurface(Surface& surface, const PointCloud& nuage)
 {
     surface.clearPoints();
 
-    const auto& elements = pointCloud.getPoints();
+    const auto& elements = nuage.getPoints();
 
     std::vector<std::shared_ptr<PointBase>> points;
     points.reserve(elements.size());
