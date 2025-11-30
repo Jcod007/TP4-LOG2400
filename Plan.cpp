@@ -127,5 +127,8 @@ shared_ptr<PointCloud> Plan::fusionEnNuage(vector<int> ids, vector<string> textu
         }
     }
 
+    // Retirer les éléments fusionnés de la liste principale du plan, car ils appartiennent maintenant au nuage.
+    
+
     return nuage;
 }
