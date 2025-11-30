@@ -15,6 +15,10 @@
 #include "FusionEnNuageCommand.h"
 #include "AffichageAvecTexture.h"
 #include "AffichageAvecID.h"
+#include "Surface.h"
+#include "IdOrderSurfaceBuilder.h"
+#include "NearestNeighborSurfaceBuilder.h"
+#include "CreerSurfaceCommand.h"
 
 using namespace std;
 
@@ -45,7 +49,7 @@ void affichageMenu()
          << "o2 - Afficher l'orthèse avec les IDs des points\n"
          << "f - Fusionner des points dans un nuage (et appliquer texture)\n"
          << "d - Deplacer un point (ID)\n"
-         << "s - Supprimer un point (ID)\n" // Rétablissement de la description pour 's'
+         << "s - Supprimer un point (ID)\n"
          << "c1 - Creer les surfaces selon l'ordre des IDs\n"
          << "c2 - Creer les surfaces selon la distance minimale\n"
          << "q - Quitter\n"
@@ -143,6 +147,16 @@ int main(int argc, char* argv[]) {
             pair<int,int> newPos = {x,y};
             
             shared_ptr<Commande> commande = make_shared<DeplacerCommand>(plan, id, newPos);
+            invocateur.setCommande(commande);
+            invocateur.executerCommande();
+        }
+        else if (cmd == "c1") {
+            shared_ptr<Commande> commande = make_shared<CreerSurfaceCommand>(plan, make_shared<IdOrderSurfaceBuilder>());
+            invocateur.setCommande(commande);
+            invocateur.executerCommande();
+        }
+        else if (cmd == "c2") {
+            shared_ptr<Commande> commande = make_shared<CreerSurfaceCommand>(plan, make_shared<NearestNeighborSurfaceBuilder>());
             invocateur.setCommande(commande);
             invocateur.executerCommande();
         }

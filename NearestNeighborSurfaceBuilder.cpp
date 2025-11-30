@@ -7,12 +7,13 @@
 #include <memory>
 #include <limits>
 #include <cmath>
+#include <algorithm>
 
 using namespace std;
 
 /**
  * Construire la surface en suivant l'algorithme du plus proche voisin :
- * - on part d'un point de départ (ici le premier de la liste)
+ * - on part d'un point de départ (ici le point avec le plus petit ID)
  * - à chaque étape, on ajoute le point non encore utilisé le plus proche du point courant (on calcule la distance euclidienne aux autres point et on prend le minimum)
  *   - on répète jusqu'à ce que tous les points soient utilisés
  */
@@ -40,8 +41,13 @@ void NearestNeighborSurfaceBuilder::buildSurface(Surface& surface, const PointCl
     const std::size_t n = points.size();
     std::vector<bool> used(n, false);
 
-    // Point de départ : le premier
-    std::size_t currentIndex = 0;
+    // Point de départ : le point avec le plus petit ID
+    auto start_it = min_element(points.begin(), points.end(), 
+        [](const shared_ptr<PointBase>& a, const shared_ptr<PointBase>& b) {
+            return a->getId() < b->getId();
+        });
+    std::size_t currentIndex = distance(points.begin(), start_it);
+    
     used[currentIndex] = true;
     surface.addPoint(points[currentIndex]);
 

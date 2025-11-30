@@ -1,27 +1,27 @@
 #pragma once
 
-#include <vector>
+#include "GraphElement.h"
 #include <memory>
-#include "PointCloud.h"
-#include "PointBase.h"
-#include "Point.h"
+#include <vector>
 
-
+class PointCloud;
 class SurfaceBuilder;
+class PointBase;
 
-class Surface {
+class Surface : public GraphElement {
 public:
-    explicit Surface(std::shared_ptr<PointCloud> pointCloud);
+    Surface(std::shared_ptr<PointCloud> pointCloud);
 
-    // Définit la stratégie de construction de la surface
     void setSurfaceBuilder(std::shared_ptr<SurfaceBuilder> builder);
-
     void build();
 
     const std::vector<std::shared_ptr<PointBase>>& getPoints() const;
-
     void clearPoints();
     void addPoint(const std::shared_ptr<PointBase>& point);
+
+    std::string dessiner() const override {
+        return "Surface"; // Placeholder
+    }
 
 private:
     std::shared_ptr<PointCloud> pointCloud_;

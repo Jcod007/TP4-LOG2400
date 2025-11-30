@@ -6,7 +6,7 @@
 using namespace std;
 
 Surface::Surface(shared_ptr<PointCloud> pointCloud)
-    : pointCloud_(move(pointCloud))
+    : GraphElement(), pointCloud_(move(pointCloud))
 {
 }
 

@@ -8,6 +8,7 @@
 #include "Texture.h"
 #include "Texture_O.h"
 #include "Texture_F.h"
+#include "Surface.h"
 
 using namespace std;
 
@@ -169,4 +170,42 @@ shared_ptr<PointCloud> Plan::fusionEnNuage(vector<int> ids, vector<string> textu
     }
 
     return nouveauNuage;
+}
+
+
+
+void Plan::creerSurface(int cloudId, shared_ptr<SurfaceBuilder> builder) {
+
+    shared_ptr<PointCloud> targetCloud = nullptr;
+
+    for (const auto& element : m_graphElements) {
+
+        if (auto cloud = dynamic_pointer_cast<PointCloud>(element)) {
+
+            if (cloud->getId() == cloudId) {
+
+                targetCloud = cloud;
+
+                break;
+
+            }
+
+        }
+
+    }
+
+
+
+    if (targetCloud) {
+
+        auto surface = make_shared<Surface>(targetCloud);
+
+        surface->setSurfaceBuilder(builder);
+
+        surface->build();
+
+        m_graphElements.push_back(surface);
+
+    }
+
 }
